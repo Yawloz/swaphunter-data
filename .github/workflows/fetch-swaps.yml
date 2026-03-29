@@ -1,0 +1,35 @@
+name: Fetch Swap Rates
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit and push swaps.json
+        run: |
+          git config user.name  "SwapHunter Bot"
+          git config user.email "bot@swaphunter.io"
+          git add swaps.json
+          git diff --staged --quiet || git commit -m "Auto: swap rates update $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
