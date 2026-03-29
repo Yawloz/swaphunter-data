@@ -200,6 +200,8 @@ MYFXBOOK_BROKER_MAP = {
     "Pepperstone":"pepperstone","Tickmill":"tickmill",
     "XMTrading":"xm","XM":"xm","FP Markets":"fpmarkets",
     "Deriv":"deriv","Deriv.com":"deriv",
+    "Fusion Markets":"fusionmarkets",
+    "Eightcap":"eightcap",
 }
 
 def fetch_myfxbook(oid, long_or_short):
