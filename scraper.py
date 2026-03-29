@@ -1,5 +1,5 @@
 """
-SwapHunter Data Pipeline v7
+SwapHunter Data Pipeline v8
 """
 
 import json
@@ -7,9 +7,6 @@ import time
 import urllib.request
 from datetime import datetime, timezone
 
-# ─────────────────────────────────────────
-# SHARED SYMBOL CONFIG
-# ─────────────────────────────────────────
 SYMBOL_OIDS = {
     "EURUSD": 116025, "GBPUSD": 116026, "USDJPY": 116027,
     "GBPJPY": 116029, "USDCAD": 116030, "EURAUD": 116031,
@@ -34,10 +31,9 @@ OUR_SYMBOLS_SET = {
 }
 
 # ─────────────────────────────────────────
-# EXNESS — std only
+# EXNESS
 # ─────────────────────────────────────────
 METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
-
 GRAPHQL_QUERY = (
     "query getTradingInstruments($account_type: String!, $instruments: [String]) {\n"
     "  tradingInstruments: allExnessAccountTypeInstruments(\n"
@@ -50,43 +46,29 @@ GRAPHQL_QUERY = (
     "}"
 )
 
-def fetch_exness_single(account_type):
+def run_exness():
+    print("── Exness (std only) ──")
     instruments = [METAL_MAP.get(s, s + "m") for s in OUR_SYMBOLS]
     reverse = {METAL_MAP.get(s, s + "m"): s for s in OUR_SYMBOLS}
     payload = json.dumps({
         "operationName": "getTradingInstruments",
         "query": GRAPHQL_QUERY,
-        "variables": {"account_type": account_type, "instruments": instruments}
+        "variables": {"account_type": "mt5_mini_real_vc", "instruments": instruments}
     }).encode()
-    req = urllib.request.Request(
-        "https://www.exness.com/pwapi/",
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Origin": "https://www.exness.com",
-            "Referer": "https://www.exness.com/trading/swap-rates/",
-        },
-        method="POST"
-    )
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        data = json.loads(resp.read().decode())
-    items = data.get("data", {}).get("tradingInstruments") or []
-    result = {}
-    for item in items:
-        canon = reverse.get(item["instrument"])
-        if canon:
-            result[canon] = {"long": item["swap_long"], "short": item["swap_short"]}
-    return result
-
-def run_exness():
-    print("── Exness (std only) ──")
     output = {}
     try:
-        result = fetch_exness_single("mt5_mini_real_vc")
-        print(f"  Got {len(result)} symbols")
-        for symbol, rates in result.items():
-            output.setdefault(symbol, {})["exness-std"] = rates
+        req = urllib.request.Request(
+            "https://www.exness.com/pwapi/", data=payload,
+            headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0","Origin":"https://www.exness.com","Referer":"https://www.exness.com/trading/swap-rates/"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            data = json.loads(resp.read().decode())
+        for item in (data.get("data",{}).get("tradingInstruments") or []):
+            canon = reverse.get(item["instrument"])
+            if canon:
+                output.setdefault(canon, {})["exness-std"] = {"long": item["swap_long"], "short": item["swap_short"]}
+        print(f"  Got {len(output)} symbols")
     except Exception as e:
         print(f"  Error: {e}")
     return output
@@ -95,100 +77,72 @@ def run_exness():
 # CASHBACKFOREX
 # ─────────────────────────────────────────
 CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
-
 CBF_BROKERS = {
     3133: {"key": "icmarkets", "groups": ["Forex Majors", "Forex Minors", "Metals", "Energies"]},
     1149: {"key": "vantage",   "groups": ["Forex", "Gold", "Silver", "Oil", "Commodities"]},
     970:  {"key": "blackbull", "groups": ["Forex Majors", "Forex", "Energies", "Commodities"]},
 }
-
 CBF_SYMBOL_MAP = {
-    "XAUUSD": "GOLD",   "XAGUSD": "SILVER",
-    "XBRUSD": "UKOIL",  "XTIUSD": "USOIL",  "XNGUSD": "NATGAS",
-    "UKOUSD": "UKOIL",  "USOUSD": "USOIL",  "NG-C": "NATGAS",
-    "BRENT":  "UKOIL",  "WTI":    "USOIL",
-    "UKOUSDft": None,   "CL-OIL": None,     "Rolltest": None, "GCM25": None,
+    "XAUUSD":"GOLD","XAGUSD":"SILVER","XBRUSD":"UKOIL","XTIUSD":"USOIL","XNGUSD":"NATGAS",
+    "UKOUSD":"UKOIL","USOUSD":"USOIL","NG-C":"NATGAS","BRENT":"UKOIL","WTI":"USOIL",
+    "UKOUSDft":None,"CL-OIL":None,"Rolltest":None,"GCM25":None,
 }
 
 def fetch_cbf_group(cbf_id, group):
-    url = f"{CBF_BASE}/{cbf_id}?currentPage=1&countPerPage=100&search=&group={group.replace(' ', '%20')}"
+    url = f"{CBF_BASE}/{cbf_id}?currentPage=1&countPerPage=100&search=&group={group.replace(' ','%20')}"
     try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Accept": "application/json", "Referer": "https://fxverify.com/",
-        })
+        req = urllib.request.Request(url, headers={"User-Agent":"Mozilla/5.0","Accept":"application/json","Referer":"https://fxverify.com/"})
         with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode())
-        return data.get("swapRates", {}).get("swapRates", [])
+            return json.loads(resp.read().decode()).get("swapRates",{}).get("swapRates",[])
     except Exception as e:
-        print(f"    CBF error [{cbf_id}] group={group}: {e}")
+        print(f"    CBF error [{cbf_id}] {group}: {e}")
         return []
 
 def run_cbf():
-    print("── CashbackForex (IC Markets, Vantage, BlackBull) ──")
+    print("── CashbackForex ──")
     output = {}
     for cbf_id, config in CBF_BROKERS.items():
         broker_key = config["key"]
-        print(f"  {broker_key} (CBF ID: {cbf_id})")
+        print(f"  {broker_key}")
         broker_data = {}
         for group in config["groups"]:
             for item in fetch_cbf_group(cbf_id, group):
-                if item.get("swapType") != "InPoints":
-                    continue
-                raw = item.get("name", "")
+                if item.get("swapType") != "InPoints": continue
+                raw = item.get("name","")
                 canon = CBF_SYMBOL_MAP.get(raw, raw)
-                if canon is None or canon not in OUR_SYMBOLS_SET or canon in broker_data:
-                    continue
+                if canon is None or canon not in OUR_SYMBOLS_SET or canon in broker_data: continue
                 lv, sv = item.get("swapLong"), item.get("swapShort")
                 broker_data[canon] = {
-                    "long":  round(float(lv), 4) if lv is not None else None,
-                    "short": round(float(sv), 4) if sv is not None else None,
+                    "long":  round(float(lv),4) if lv is not None else None,
+                    "short": round(float(sv),4) if sv is not None else None,
                 }
             time.sleep(0.8)
         print(f"    Got {len(broker_data)} symbols")
-        for symbol, rates in broker_data.items():
-            output.setdefault(symbol, {})[broker_key] = rates
-    print(f"  Done. {len(output)} symbols")
+        for sym, rates in broker_data.items():
+            output.setdefault(sym,{})[broker_key] = rates
     return output
 
 # ─────────────────────────────────────────
-# HF MARKETS — JS extraction, find correct container IDs
+# HF MARKETS — debug row structure to find symbol column
 # ─────────────────────────────────────────
 HF_URL = "https://hfeu.com/en/trading-instruments/forex"
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
 
 def parse_rate(val):
-    if not val or str(val).strip() in ("-", "—", "N/A", ""):
-        return None
-    try:
-        return round(float(str(val).strip().replace(",", ".")), 4)
-    except Exception:
-        return None
-
-def normalize_symbol(raw):
-    """Strip suffixes like .p, .c, spaces etc and uppercase"""
-    import re
-    cleaned = re.sub(r'[^A-Z]', '', raw.upper())
-    return cleaned
+    if not val or str(val).strip() in ("-","—","N/A",""): return None
+    try: return round(float(str(val).strip().replace(",",".")), 4)
+    except: return None
 
 def run_hfmarkets():
-    print("── HF Markets (Premium, Pro, Zero) ──")
+    print("── HF Markets ──")
     results = {}
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
-            browser = p.chromium.launch(
-                headless=True,
-                args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
-            )
-            page = browser.new_page(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-            )
-            print(f"  Loading {HF_URL}")
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox","--disable-setuid-sandbox","--disable-dev-shm-usage"])
+            page = browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
             page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
             time.sleep(5)
-
-            # Remove cookie overlay
             page.evaluate("""
                 ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
                     const el = document.getElementById(id); if (el) el.remove();
@@ -196,149 +150,85 @@ def run_hfmarkets():
             """)
             time.sleep(1)
 
-            # First: discover all table container IDs on the page
-            container_ids = page.evaluate("""
+            # Debug: dump ALL cell text from first 3 rows of premium container
+            debug = page.evaluate("""
                 () => {
-                    const all = document.querySelectorAll('[id*="table-container"], [id*="table_container"]');
-                    return Array.from(all).map(el => el.id);
-                }
-            """)
-            print(f"  Found container IDs: {container_ids}")
-
-            # Also print first 5 symbol names from the premium container to debug format
-            sample_syms = page.evaluate("""
-                () => {
-                    const containers = document.querySelectorAll('[id*="table-container"]');
-                    const samples = [];
-                    containers.forEach(c => {
-                        const rows = c.querySelectorAll('table tbody tr');
-                        rows.forEach((row, i) => {
-                            if (i < 3) {
-                                const cells = row.querySelectorAll('td');
-                                if (cells.length > 0) samples.push(c.id + ':' + cells[0].innerText.trim());
-                            }
+                    const container = document.getElementById('premium-table-container');
+                    if (!container) return {error: 'container not found'};
+                    const rows = container.querySelectorAll('table tbody tr');
+                    const result = [];
+                    for (let i = 0; i < Math.min(3, rows.length); i++) {
+                        const cells = rows[i].querySelectorAll('td');
+                        const cellData = [];
+                        cells.forEach((cell, idx) => {
+                            cellData.push({
+                                idx: idx,
+                                innerText: cell.innerText.trim(),
+                                innerHTML: cell.innerHTML.trim().substring(0, 200)
+                            });
                         });
-                    });
-                    return samples;
-                }
-            """)
-            print(f"  Sample symbols: {sample_syms[:10]}")
-
-            # Map container IDs to broker keys — use whatever IDs we found
-            container_map = {}
-            for cid in container_ids:
-                cid_lower = cid.lower()
-                if "pro" in cid_lower and "premium" not in cid_lower:
-                    container_map[cid] = "hf-pro"
-                elif "premium" in cid_lower and "pro" not in cid_lower:
-                    container_map[cid] = "hf-premium"
-                elif "zero" in cid_lower:
-                    container_map[cid] = "hf-zero"
-            print(f"  Container map: {container_map}")
-
-            # Extract all tables
-            table_data = page.evaluate("""
-                (containerMap) => {
-                    const result = {};
-                    for (const [containerId, brokerKey] of Object.entries(containerMap)) {
-                        const container = document.getElementById(containerId);
-                        if (!container) { result[brokerKey] = []; continue; }
-                        const rows = container.querySelectorAll('table tbody tr');
-                        const rowData = [];
-                        rows.forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            if (cells.length >= 6) {
-                                rowData.push([
-                                    cells[0].innerText.trim(),
-                                    cells[4].innerText.trim(),
-                                    cells[5].innerText.trim()
-                                ]);
-                            }
-                        });
-                        result[brokerKey] = rowData;
+                        result.push(cellData);
                     }
                     return result;
                 }
-            """, container_map)
-
-            for broker_key, rows in table_data.items():
-                matched = 0
-                for row in rows:
-                    raw_sym = row[0]
-                    # Try direct match first, then normalized
-                    sym = HF_SYMBOL_MAP.get(raw_sym.upper(), raw_sym.upper())
-                    if sym not in OUR_SYMBOLS_SET:
-                        sym = normalize_symbol(raw_sym)
-                        sym = HF_SYMBOL_MAP.get(sym, sym)
-                    if sym not in OUR_SYMBOLS_SET:
-                        continue
-                    short = parse_rate(row[1])
-                    long  = parse_rate(row[2])
-                    results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
-                    matched += 1
-                print(f"  {broker_key}: {len(rows)} rows, {matched} matched")
+            """)
+            print(f"  DEBUG first 3 rows of premium container:")
+            print(json.dumps(debug, indent=2)[:2000])
 
             browser.close()
     except Exception as e:
-        print(f"  HF Markets exception: {e}")
-
-    brokers = set(b for s in results.values() for b in s.keys())
-    print(f"  Done. {len(results)} symbols, brokers: {brokers}")
+        print(f"  Exception: {e}")
     return results
 
 # ─────────────────────────────────────────
 # MYFXBOOK
 # ─────────────────────────────────────────
 MYFXBOOK_BROKER_MAP = {
-    "Pepperstone": "pepperstone", "Tickmill": "tickmill",
-    "XMTrading": "xm", "XM": "xm",
-    "FP Markets": "fpmarkets",
-    "Deriv": "deriv", "Deriv.com": "deriv",
+    "Pepperstone":"pepperstone","Tickmill":"tickmill",
+    "XMTrading":"xm","XM":"xm","FP Markets":"fpmarkets",
+    "Deriv":"deriv","Deriv.com":"deriv",
 }
 
 def fetch_myfxbook(oid, long_or_short):
-    url = (f"https://www.myfxbook.com/get-swap-chart-by-symbol.json"
-           f"?symbolInfoOid={oid}&swapShortLong={long_or_short}&rand=0.5")
+    url = f"https://www.myfxbook.com/get-swap-chart-by-symbol.json?symbolInfoOid={oid}&swapShortLong={long_or_short}&rand=0.5"
     try:
         req = urllib.request.Request(url, headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Referer": "https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
-            "X-Requested-With": "XMLHttpRequest",
+            "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept":"application/json, text/javascript, */*; q=0.01",
+            "Referer":"https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
+            "X-Requested-With":"XMLHttpRequest",
         })
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
-        brokers = data.get("categories", [])
-        values  = data.get("series", [{}])[0].get("data", [])
+        brokers = data.get("categories",[])
+        values  = data.get("series",[{}])[0].get("data",[])
         result = {}
         for name, val in zip(brokers, values):
             key = MYFXBOOK_BROKER_MAP.get(name)
-            if key:
-                result[key] = round(float(val), 4)
+            if key: result[key] = round(float(val), 4)
         return result
     except Exception as e:
         print(f"    Myfxbook error OID {oid}: {e}")
         return {}
 
 def run_myfxbook():
-    print("── Myfxbook (Pepperstone, Tickmill, XM, FP Markets, Deriv) ──")
+    print("── Myfxbook ──")
     output = {}
-    blocked_count = 0
+    blocked = 0
     for symbol, oid in SYMBOL_OIDS.items():
         print(f"  {symbol}...")
-        long_data  = fetch_myfxbook(oid, 0)
-        if not long_data: blocked_count += 1
+        ld = fetch_myfxbook(oid, 0)
+        if not ld: blocked += 1
         time.sleep(1.2)
-        short_data = fetch_myfxbook(oid, 1)
+        sd = fetch_myfxbook(oid, 1)
         time.sleep(1.2)
         output[symbol] = {}
-        for broker in set(long_data) | set(short_data):
-            output[symbol][broker] = {"long": long_data.get(broker), "short": short_data.get(broker)}
-        if blocked_count >= 3 and len(output) == 3:
-            print("  Myfxbook fully blocked. Skipping.")
+        for broker in set(ld) | set(sd):
+            output[symbol][broker] = {"long": ld.get(broker), "short": sd.get(broker)}
+        if blocked >= 3 and len(output) == 3:
+            print("  Blocked. Skipping.")
             break
-    brokers_found = set(b for sym in output.values() for b in sym.keys())
-    print(f"  Done. Brokers found: {brokers_found}")
+    print(f"  Done. Brokers: {set(b for s in output.values() for b in s)}")
     return output
 
 # ─────────────────────────────────────────
@@ -346,29 +236,23 @@ def run_myfxbook():
 # ─────────────────────────────────────────
 def run():
     print(f"\nSwapHunter scraper — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
-
     exn_data = run_exness()
     cbf_data = run_cbf()
     hfm_data = run_hfmarkets()
     mfx_data = run_myfxbook()
 
-    all_symbols = set(list(exn_data.keys()) + list(cbf_data.keys()) + list(hfm_data.keys()) + list(mfx_data.keys()))
+    all_syms = set(list(exn_data)+list(cbf_data)+list(hfm_data)+list(mfx_data))
     merged = {}
-    for sym in all_symbols:
+    for sym in all_syms:
         merged[sym] = {}
-        merged[sym].update(exn_data.get(sym, {}))
-        merged[sym].update(cbf_data.get(sym, {}))
-        merged[sym].update(hfm_data.get(sym, {}))
-        merged[sym].update(mfx_data.get(sym, {}))
+        merged[sym].update(exn_data.get(sym,{}))
+        merged[sym].update(cbf_data.get(sym,{}))
+        merged[sym].update(hfm_data.get(sym,{}))
+        merged[sym].update(mfx_data.get(sym,{}))
 
-    brokers = set(b for sym in merged.values() for b in sym.keys())
-    output = {
-        "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-        "sources": sorted(brokers),
-        "swaps": merged
-    }
-    with open("swaps.json", "w") as f:
-        json.dump(output, f, indent=2)
+    brokers = set(b for s in merged.values() for b in s)
+    with open("swaps.json","w") as f:
+        json.dump({"updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "sources": sorted(brokers), "swaps": merged}, f, indent=2)
 
     total = sum(len(v) for v in merged.values())
     print(f"\n✓ Done — {len(merged)} symbols, {len(brokers)} brokers, {total} entries")
