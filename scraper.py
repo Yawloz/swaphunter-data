@@ -1,8 +1,12 @@
 """
-SwapHunter Data Pipeline
+SwapHunter Data Pipeline v2
 Sources:
-  - Myfxbook hidden JSON API -> Pepperstone, Tickmill, XM, FP Markets, Deriv
-  - Exness GraphQL API -> Exness Standard, Pro, Zero, Raw
+  - Exness GraphQL API       -> exness-std, exness-pro, exness-zero, exness-raw
+  - CashbackForex API        -> IC Markets, Vantage, BlackBull
+  - HF Markets (Playwright)  -> hf-premium, hf-pro, hf-zero
+  - Myfxbook API             -> Pepperstone, Tickmill, XM, FP Markets, Deriv
+                                (may be blocked by GitHub IPs — fails gracefully)
+
 Runs via GitHub Actions every 2 hours. No server needed.
 """
 
@@ -13,7 +17,7 @@ import urllib.error
 from datetime import datetime, timezone
 
 # ─────────────────────────────────────────
-# MYFXBOOK CONFIG
+# SHARED SYMBOL CONFIG
 # ─────────────────────────────────────────
 SYMBOL_OIDS = {
     "EURUSD": 116025, "GBPUSD": 116026, "USDJPY": 116027,
@@ -28,62 +32,18 @@ SYMBOL_OIDS = {
     "GOLD":   116073, "CADCHF": 116082, "GBPAUD": 116083,
 }
 
-MYFXBOOK_BROKER_MAP = {
-    "Pepperstone":     "pepperstone",
-    "Tickmill":        "tickmill",
-    "XMTrading":       "xm",
-    "XM":              "xm",
-    "FP Markets":      "fpmarkets",
-    "Deriv":           "deriv",
+OUR_SYMBOLS = list(SYMBOL_OIDS.keys())
+
+OUR_SYMBOLS_SET = {
+    "EURUSD","GBPUSD","USDJPY","GBPJPY","USDCAD","EURAUD","EURJPY",
+    "AUDCAD","AUDJPY","AUDNZD","AUDUSD","CADJPY","EURCAD","EURCHF",
+    "EURGBP","EURNZD","GBPCAD","GBPCHF","NZDCAD","NZDJPY","NZDUSD",
+    "USDCHF","CHFJPY","AUDCHF","GBPNZD","NZDCHF","SILVER","GOLD",
+    "CADCHF","GBPAUD","UKOIL","USOIL","NATGAS",
 }
 
-MYFXBOOK_BROKERS = set(MYFXBOOK_BROKER_MAP.values())
-
-def fetch_myfxbook(oid, long_or_short):
-    url = (f"https://www.myfxbook.com/get-swap-chart-by-symbol.json"
-           f"?symbolInfoOid={oid}&swapShortLong={long_or_short}&rand=0.5")
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
-        "Referer": "https://www.myfxbook.com/forex-broker-swaps/ic-markets/312",
-    }
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode())
-        brokers = data.get("categories", [])
-        values  = data.get("series", [{}])[0].get("data", [])
-        result = {}
-        for name, val in zip(brokers, values):
-            key = MYFXBOOK_BROKER_MAP.get(name)
-            if key:
-                result[key] = round(float(val), 4)
-        return result
-    except Exception as e:
-        print(f"    Myfxbook error OID {oid}: {e}")
-        return {}
-
-def run_myfxbook():
-    print("── Myfxbook (Pepperstone, Tickmill, XM, FP Markets, Deriv) ──")
-    output = {}
-    for symbol, oid in SYMBOL_OIDS.items():
-        print(f"  {symbol}...")
-        long_data  = fetch_myfxbook(oid, 0)
-        time.sleep(1.2)
-        short_data = fetch_myfxbook(oid, 1)
-        time.sleep(1.2)
-        output[symbol] = {}
-        for broker in set(long_data) | set(short_data):
-            output[symbol][broker] = {
-                "long":  long_data.get(broker),
-                "short": short_data.get(broker),
-            }
-    brokers_found = set(b for sym in output.values() for b in sym.keys())
-    print(f"  Done. Brokers found: {brokers_found}")
-    return output
-
 # ─────────────────────────────────────────
-# EXNESS CONFIG
+# EXNESS — GraphQL API
 # ─────────────────────────────────────────
 EXNESS_ACCOUNTS = {
     "exness-std":  "mt5_mini_real_vc",
@@ -92,8 +52,7 @@ EXNESS_ACCOUNTS = {
     "exness-raw":  "mt5_raw_real_vc",
 }
 
-OUR_SYMBOLS = list(SYMBOL_OIDS.keys())
-METAL_MAP   = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
+METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
 
 GRAPHQL_QUERY = (
     "query getTradingInstruments($account_type: String!, $instruments: [String]) {\n"
@@ -108,9 +67,7 @@ GRAPHQL_QUERY = (
 )
 
 def fetch_exness(account_key, account_type):
-    instruments = [
-        METAL_MAP.get(s, s + "m") for s in OUR_SYMBOLS
-    ]
+    instruments = [METAL_MAP.get(s, s + "m") for s in OUR_SYMBOLS]
     reverse = {METAL_MAP.get(s, s + "m"): s for s in OUR_SYMBOLS}
 
     payload = json.dumps({
@@ -139,10 +96,8 @@ def fetch_exness(account_key, account_type):
             canon = reverse.get(item["instrument"])
             if canon:
                 result[canon] = {
-                    "long":       item["swap_long"],
-                    "short":      item["swap_short"],
-                    "commission": item.get("commission_per_lot"),
-                    "spread":     item.get("median_spread"),
+                    "long":  item["swap_long"],
+                    "short": item["swap_short"],
                 }
         return result
     except Exception as e:
@@ -151,7 +106,7 @@ def fetch_exness(account_key, account_type):
 
 def run_exness():
     print("── Exness (4 servers) ──")
-    output = {}  # symbol -> {broker -> {long, short}}
+    output = {}
     for account_key, account_type in EXNESS_ACCOUNTS.items():
         print(f"  Fetching {account_key} ({account_type})...")
         data = fetch_exness(account_key, account_type)
@@ -161,122 +116,15 @@ def run_exness():
                 output[symbol] = {}
             output[symbol][account_key] = rates
         time.sleep(1.5)
+    brokers_found = set(b for sym in output.values() for b in sym.keys())
+    print(f"  Done. Brokers found: {brokers_found}")
     return output
 
 # ─────────────────────────────────────────
-# MAIN
+# CASHBACKFOREX — IC Markets, Vantage, BlackBull
 # ─────────────────────────────────────────
-def run():
-    print(f"\nSwapHunter scraper — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
-
-    mfx_data = run_myfxbook()
-    exn_data = run_exness()
-    hfm_data = run_hfmarkets()
-    cbf_data = run_cbf()
-
-    # Merge: symbol -> {all brokers}
-    all_symbols = set(
-        list(mfx_data.keys()) + list(exn_data.keys()) +
-        list(hfm_data.keys()) + list(cbf_data.keys())
-    )
-    merged = {}
-    for sym in all_symbols:
-        merged[sym] = {}
-        merged[sym].update(mfx_data.get(sym, {}))
-        merged[sym].update(exn_data.get(sym, {}))
-        merged[sym].update(hfm_data.get(sym, {}))
-        merged[sym].update(cbf_data.get(sym, {}))
-
-    output = {
-        "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-        "sources": ["myfxbook", "exness-api"],
-        "swaps": merged
-    }
-
-    with open("swaps.json", "w") as f:
-        json.dump(output, f, indent=2)
-
-    total = sum(len(v) for v in merged.values())
-    brokers = set(b for sym in merged.values() for b in sym.keys())
-    print(f"\n✓ Done — {len(merged)} symbols, {len(brokers)} brokers, {total} entries")
-    print(f"  Brokers: {sorted(brokers)}")
-
-if __name__ == "__main__":
-    run()
-
-# ─────────────────────────────────────────
-# HF MARKETS — PLAYWRIGHT (JS-rendered page)
-# ─────────────────────────────────────────
-from playwright.sync_api import sync_playwright
-import time as _time
-
-HF_URL = "https://hfeu.com/en/trading-instruments/forex"
-HF_TABS = {
-    "Premium Account":     "hf-premium",
-    "Premium Pro Account": "hf-pro",
-    "Zero Account":        "hf-zero",
-}
-HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
-
-def parse_rate(val):
-    if not val or val.strip() in ("-", "—", "N/A", ""):
-        return None
-    try:
-        return round(float(val.strip().replace(",", ".")), 4)
-    except:
-        return None
-
-def run_hfmarkets():
-    print("── HF Markets (Premium, Pro, Zero) ──")
-    results = {}
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(HF_URL, wait_until="networkidle", timeout=30000)
-            _time.sleep(2)
-            for tab_text, broker_key in HF_TABS.items():
-                print(f"  Tab: {tab_text}")
-                try:
-                    page.click(f"text={tab_text}", timeout=10000)
-                    _time.sleep(2)
-                    rows = page.query_selector_all("table tbody tr")
-                    for row in rows:
-                        cells = row.query_selector_all("td")
-                        if len(cells) < 6:
-                            continue
-                        sym = HF_SYMBOL_MAP.get(cells[0].inner_text().strip().upper(),
-                                                cells[0].inner_text().strip().upper())
-                        if sym not in set(OUR_SYMBOLS):
-                            continue
-                        short = parse_rate(cells[4].inner_text())
-                        long  = parse_rate(cells[5].inner_text())
-                        if sym not in results:
-                            results[sym] = {}
-                        results[sym][broker_key] = {"long": long, "short": short}
-                except Exception as e:
-                    print(f"    Error on {tab_text}: {e}")
-            browser.close()
-    except Exception as e:
-        print(f"  HF Markets failed: {e}")
-    brokers = set(b for s in results.values() for b in s.keys())
-    print(f"  Done. {len(results)} symbols, brokers: {brokers}")
-    return results
-"""
-CashbackForex API scraper v2
-Endpoint: https://spreads-api.cashbackforex.com/api/swapratesforbroker/{cbf_id}
-Strategy: fetch all known groups per broker, filter purely by canonical symbol name.
-Group names vary per broker — don't rely on them, just whitelist by symbol.
-"""
-
-import json
-import time
-import urllib.request
-
 CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
 
-# CBF broker ID -> (broker_key, groups_to_fetch)
-# Groups differ per broker — discovered via F12
 CBF_BROKERS = {
     3133: {
         "key": "icmarkets",
@@ -290,39 +138,19 @@ CBF_BROKERS = {
         "key": "blackbull",
         "groups": ["Forex Majors", "Forex", "Energies", "Commodities"],
     },
-    # Add others once we find their CBF IDs + group names:
-    # XXXX: {"key": "capitalcom", "groups": [...]},
-    # XXXX: {"key": "easymarkets","groups": [...]},
 }
 
-# Canonical symbol whitelist — ONLY these pass through
-OUR_SYMBOLS = {
-    "EURUSD","GBPUSD","USDJPY","GBPJPY","USDCAD","EURAUD","EURJPY",
-    "AUDCAD","AUDJPY","AUDNZD","AUDUSD","CADJPY","EURCAD","EURCHF",
-    "EURGBP","EURNZD","GBPCAD","GBPCHF","NZDCAD","NZDJPY","NZDUSD",
-    "USDCHF","CHFJPY","AUDCHF","GBPNZD","NZDCHF","SILVER","GOLD",
-    "CADCHF","GBPAUD","UKOIL","USOIL","NATGAS",
-}
-
-# Raw CBF symbol name -> our canonical name
-# Anything NOT in this map keeps its original name (for standard FX pairs)
-SYMBOL_MAP = {
-    # Metals
+CBF_SYMBOL_MAP = {
     "XAUUSD": "GOLD",
     "XAGUSD": "SILVER",
-    # Energies — IC Markets style
     "XBRUSD": "UKOIL",
     "XTIUSD": "USOIL",
     "XNGUSD": "NATGAS",
-    # Energies — Vantage style
-    "UKOUSD": "UKOIL",   # Brent Cash
-    "USOUSD": "USOIL",   # WTI Cash
-    "NG-C":   "NATGAS",  # Natural Gas Cash (Commodities group)
-    # Energies — BlackBull style
+    "UKOUSD": "UKOIL",
+    "USOUSD": "USOIL",
+    "NG-C":   "NATGAS",
     "BRENT":  "UKOIL",
     "WTI":    "USOIL",
-    # NATGAS is already canonical for BlackBull — no mapping needed
-    # Futures/forwards to explicitly SKIP (map to None = ignore)
     "UKOUSDft": None,
     "CL-OIL":   None,
     "Rolltest":  None,
@@ -347,13 +175,13 @@ def fetch_cbf_group(cbf_id, group):
         return []
 
 def run_cbf():
-    print("── CashbackForex API ──")
-    output = {}  # symbol -> broker -> {long, short}
+    print("── CashbackForex (IC Markets, Vantage, BlackBull) ──")
+    output = {}
 
     for cbf_id, config in CBF_BROKERS.items():
         broker_key = config["key"]
         groups     = config["groups"]
-        print(f"\n  {broker_key} (CBF ID: {cbf_id})")
+        print(f"  {broker_key} (CBF ID: {cbf_id})")
         broker_data = {}
 
         for group in groups:
@@ -362,22 +190,19 @@ def run_cbf():
                 raw_name  = item.get("name", "")
                 swap_type = item.get("swapType", "")
 
-                # Skip non-InPoints (futures, SwapNone, etc.)
                 if swap_type != "InPoints":
                     continue
 
-                # Resolve canonical name
-                if raw_name in SYMBOL_MAP:
-                    canon = SYMBOL_MAP[raw_name]
-                    if canon is None:  # explicitly blacklisted
+                if raw_name in CBF_SYMBOL_MAP:
+                    canon = CBF_SYMBOL_MAP[raw_name]
+                    if canon is None:
                         continue
                 else:
-                    canon = raw_name  # standard FX pair, use as-is
+                    canon = raw_name
 
-                if canon not in OUR_SYMBOLS:
+                if canon not in OUR_SYMBOLS_SET:
                     continue
 
-                # Don't overwrite if already captured from an earlier group
                 if canon in broker_data:
                     continue
 
@@ -389,7 +214,7 @@ def run_cbf():
                 }
             time.sleep(0.8)
 
-        print(f"    Got {len(broker_data)} symbols: {sorted(broker_data.keys())}")
+        print(f"    Got {len(broker_data)} symbols")
         for symbol, rates in broker_data.items():
             if symbol not in output:
                 output[symbol] = {}
@@ -397,9 +222,172 @@ def run_cbf():
 
     total = sum(len(v) for v in output.values())
     brokers = set(b for sym in output.values() for b in sym.keys())
-    print(f"\n  CBF done — {len(output)} symbols, {len(brokers)} brokers, {total} entries")
+    print(f"  Done. {len(output)} symbols, {len(brokers)} brokers, {total} entries")
     return output
 
+# ─────────────────────────────────────────
+# HF MARKETS — Playwright (JS-rendered page)
+# ─────────────────────────────────────────
+HF_URL = "https://hfeu.com/en/trading-instruments/forex"
+HF_TABS = {
+    "Premium Account":     "hf-premium",
+    "Premium Pro Account": "hf-pro",
+    "Zero Account":        "hf-zero",
+}
+HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
+
+def parse_rate(val):
+    if not val or val.strip() in ("-", "—", "N/A", ""):
+        return None
+    try:
+        return round(float(val.strip().replace(",", ".")), 4)
+    except Exception:
+        return None
+
+def run_hfmarkets():
+    print("── HF Markets (Premium, Pro, Zero) ──")
+    results = {}
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto(HF_URL, wait_until="networkidle", timeout=30000)
+            time.sleep(2)
+            for tab_text, broker_key in HF_TABS.items():
+                print(f"  Tab: {tab_text}")
+                try:
+                    page.click(f"text={tab_text}", timeout=10000)
+                    time.sleep(2)
+                    rows = page.query_selector_all("table tbody tr")
+                    for row in rows:
+                        cells = row.query_selector_all("td")
+                        if len(cells) < 6:
+                            continue
+                        raw_sym = cells[0].inner_text().strip().upper()
+                        sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+                        if sym not in OUR_SYMBOLS_SET:
+                            continue
+                        short = parse_rate(cells[4].inner_text())
+                        long  = parse_rate(cells[5].inner_text())
+                        if sym not in results:
+                            results[sym] = {}
+                        results[sym][broker_key] = {"long": long, "short": short}
+                except Exception as e:
+                    print(f"    Error on {tab_text}: {e}")
+            browser.close()
+    except Exception as e:
+        print(f"  HF Markets failed: {e}")
+    brokers = set(b for s in results.values() for b in s.keys())
+    print(f"  Done. {len(results)} symbols, brokers: {brokers}")
+    return results
+
+# ─────────────────────────────────────────
+# MYFXBOOK — Pepperstone, Tickmill, XM, FP Markets, Deriv
+# NOTE: May return 403 from GitHub IPs (bot detection).
+#       Failures are non-fatal — other sources still run.
+# ─────────────────────────────────────────
+MYFXBOOK_BROKER_MAP = {
+    "Pepperstone": "pepperstone",
+    "Tickmill":    "tickmill",
+    "XMTrading":   "xm",
+    "XM":          "xm",
+    "FP Markets":  "fpmarkets",
+    "Deriv":       "deriv",
+}
+
+def fetch_myfxbook(oid, long_or_short):
+    url = (f"https://www.myfxbook.com/get-swap-chart-by-symbol.json"
+           f"?symbolInfoOid={oid}&swapShortLong={long_or_short}&rand=0.5")
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode())
+        brokers = data.get("categories", [])
+        values  = data.get("series", [{}])[0].get("data", [])
+        result = {}
+        for name, val in zip(brokers, values):
+            key = MYFXBOOK_BROKER_MAP.get(name)
+            if key:
+                result[key] = round(float(val), 4)
+        return result
+    except Exception as e:
+        print(f"    Myfxbook error OID {oid}: {e}")
+        return {}
+
+def run_myfxbook():
+    print("── Myfxbook (Pepperstone, Tickmill, XM, FP Markets, Deriv) ──")
+    output = {}
+    blocked_count = 0
+    for symbol, oid in SYMBOL_OIDS.items():
+        print(f"  {symbol}...")
+        long_data  = fetch_myfxbook(oid, 0)
+        if not long_data:
+            blocked_count += 1
+        time.sleep(1.2)
+        short_data = fetch_myfxbook(oid, 1)
+        time.sleep(1.2)
+        output[symbol] = {}
+        for broker in set(long_data) | set(short_data):
+            output[symbol][broker] = {
+                "long":  long_data.get(broker),
+                "short": short_data.get(broker),
+            }
+        # If first 3 symbols all blocked, abort early — don't waste 5 minutes
+        if blocked_count >= 3 and len(output) == 3:
+            print("  Myfxbook appears fully blocked from this IP. Skipping remaining symbols.")
+            break
+
+    brokers_found = set(b for sym in output.values() for b in sym.keys())
+    print(f"  Done. Brokers found: {brokers_found}")
+    return output
+
+# ─────────────────────────────────────────
+# MAIN
+# ─────────────────────────────────────────
+def run():
+    print(f"\nSwapHunter scraper — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
+
+    exn_data = run_exness()
+    cbf_data = run_cbf()
+    hfm_data = run_hfmarkets()
+    mfx_data = run_myfxbook()
+
+    # Merge all sources: symbol -> {all brokers}
+    all_symbols = set(
+        list(exn_data.keys()) + list(cbf_data.keys()) +
+        list(hfm_data.keys()) + list(mfx_data.keys())
+    )
+
+    merged = {}
+    for sym in all_symbols:
+        merged[sym] = {}
+        merged[sym].update(exn_data.get(sym, {}))
+        merged[sym].update(cbf_data.get(sym, {}))
+        merged[sym].update(hfm_data.get(sym, {}))
+        merged[sym].update(mfx_data.get(sym, {}))
+
+    brokers = set(b for sym in merged.values() for b in sym.keys())
+
+    output = {
+        "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "sources": sorted(brokers),
+        "swaps": merged
+    }
+
+    with open("swaps.json", "w") as f:
+        json.dump(output, f, indent=2)
+
+    total = sum(len(v) for v in merged.values())
+    print(f"\n✓ Done — {len(merged)} symbols, {len(brokers)} brokers, {total} entries")
+    print(f"  Brokers: {sorted(brokers)}")
+
 if __name__ == "__main__":
-    result = run_cbf()
-    print(json.dumps(result, indent=2))
+    run()
