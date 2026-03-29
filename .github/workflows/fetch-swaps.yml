@@ -32,4 +32,4 @@ jobs:
           git config user.email "bot@swaphunter.io"
           git add swaps.json
           git diff --staged --quiet || git commit -m "Auto: swap rates update $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git push
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
