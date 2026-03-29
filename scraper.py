@@ -1,18 +1,15 @@
 """
-SwapHunter Data Pipeline v3
+SwapHunter Data Pipeline v4
 Sources:
   - Exness GraphQL API       -> exness-std, exness-pro, exness-zero, exness-raw
   - CashbackForex API        -> IC Markets, Vantage, BlackBull
   - HF Markets (Playwright)  -> hf-premium, hf-pro, hf-zero
   - Myfxbook API             -> Pepperstone, Tickmill, XM, FP Markets, Deriv
-
-Runs via GitHub Actions every 2 hours. No server needed.
 """
 
 import json
 import time
 import urllib.request
-import urllib.error
 from datetime import datetime, timezone
 
 # ─────────────────────────────────────────
@@ -43,12 +40,15 @@ OUR_SYMBOLS_SET = {
 
 # ─────────────────────────────────────────
 # EXNESS — GraphQL API
+# Probe all known account type strings, use whichever returns data
 # ─────────────────────────────────────────
+# std confirmed working: mt5_mini_real_vc
+# pro/zero/raw: try multiple known strings, use first that returns data
 EXNESS_ACCOUNTS = {
-    "exness-std":  "mt5_mini_real_vc",
-    "exness-pro":  "mt5_pro_real_vc",
-    "exness-zero": "mt5_zero_spread_real_vc",
-    "exness-raw":  "mt5_raw_spread_real_vc",
+    "exness-std": ["mt5_mini_real_vc"],
+    "exness-pro": ["mt5_pro_real_vc", "mt5_classic_real_vc", "mt5_standard_plus_real_vc"],
+    "exness-zero": ["mt5_zero_spread_real_vc", "mt5_zero_real_vc"],
+    "exness-raw": ["mt5_raw_spread_real_vc", "mt5_raw_real_vc"],
 }
 
 METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
@@ -65,60 +65,58 @@ GRAPHQL_QUERY = (
     "}"
 )
 
-def fetch_exness(account_key, account_type, retries=3):
+def fetch_exness_single(account_type):
     instruments = [METAL_MAP.get(s, s + "m") for s in OUR_SYMBOLS]
     reverse = {METAL_MAP.get(s, s + "m"): s for s in OUR_SYMBOLS}
-
     payload = json.dumps({
         "operationName": "getTradingInstruments",
         "query": GRAPHQL_QUERY,
         "variables": {"account_type": account_type, "instruments": instruments}
     }).encode()
-
-    for attempt in range(retries):
-        try:
-            req = urllib.request.Request(
-                "https://www.exness.com/pwapi/",
-                data=payload,
-                headers={
-                    "Content-Type": "application/json",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                    "Origin": "https://www.exness.com",
-                    "Referer": "https://www.exness.com/trading/swap-rates/",
-                },
-                method="POST"
-            )
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                raw = resp.read().decode()
-            data = json.loads(raw)
-            items = data.get("data", {}).get("tradingInstruments", [])
-            result = {}
-            for item in items:
-                canon = reverse.get(item["instrument"])
-                if canon:
-                    result[canon] = {
-                        "long":  item["swap_long"],
-                        "short": item["swap_short"],
-                    }
-            return result
-        except Exception as e:
-            print(f"    Exness error [{account_key}] attempt {attempt+1}: {e}")
-            if attempt < retries - 1:
-                time.sleep(5)
-    return {}
+    req = urllib.request.Request(
+        "https://www.exness.com/pwapi/",
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Origin": "https://www.exness.com",
+            "Referer": "https://www.exness.com/trading/swap-rates/",
+        },
+        method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        data = json.loads(resp.read().decode())
+    items = data.get("data", {}).get("tradingInstruments") or []
+    result = {}
+    for item in items:
+        canon = reverse.get(item["instrument"])
+        if canon:
+            result[canon] = {"long": item["swap_long"], "short": item["swap_short"]}
+    return result
 
 def run_exness():
     print("── Exness (4 servers) ──")
     output = {}
-    for account_key, account_type in EXNESS_ACCOUNTS.items():
-        print(f"  Fetching {account_key} ({account_type})...")
-        data = fetch_exness(account_key, account_type)
-        print(f"    Got {len(data)} symbols")
-        for symbol, rates in data.items():
-            if symbol not in output:
-                output[symbol] = {}
-            output[symbol][account_key] = rates
+    for account_key, type_candidates in EXNESS_ACCOUNTS.items():
+        print(f"  Fetching {account_key}...")
+        result = {}
+        for account_type in type_candidates:
+            try:
+                print(f"    Trying {account_type}...")
+                result = fetch_exness_single(account_type)
+                if result:
+                    print(f"    Got {len(result)} symbols with {account_type}")
+                    break
+                else:
+                    print(f"    Returned 0 symbols")
+            except Exception as e:
+                print(f"    Error: {e}")
+            time.sleep(3)
+
+        for symbol, rates in result.items():
+            output.setdefault(symbol, {})[account_key] = rates
         time.sleep(4)
+
     brokers_found = set(b for sym in output.values() for b in sym.keys())
     print(f"  Done. Brokers found: {brokers_found}")
     return output
@@ -144,13 +142,11 @@ CBF_SYMBOL_MAP = {
 
 def fetch_cbf_group(cbf_id, group):
     url = f"{CBF_BASE}/{cbf_id}?currentPage=1&countPerPage=100&search=&group={group.replace(' ', '%20')}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
-        "Referer": "https://fxverify.com/",
-    }
     try:
-        req = urllib.request.Request(url, headers=headers)
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept": "application/json", "Referer": "https://fxverify.com/",
+        })
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
         return data.get("swapRates", {}).get("swapRates", [])
@@ -167,14 +163,13 @@ def run_cbf():
         broker_data = {}
         for group in config["groups"]:
             for item in fetch_cbf_group(cbf_id, group):
-                raw_name  = item.get("name", "")
                 if item.get("swapType") != "InPoints":
                     continue
-                canon = CBF_SYMBOL_MAP.get(raw_name, raw_name)
+                raw = item.get("name", "")
+                canon = CBF_SYMBOL_MAP.get(raw, raw)
                 if canon is None or canon not in OUR_SYMBOLS_SET or canon in broker_data:
                     continue
-                lv = item.get("swapLong")
-                sv = item.get("swapShort")
+                lv, sv = item.get("swapLong"), item.get("swapShort")
                 broker_data[canon] = {
                     "long":  round(float(lv), 4) if lv is not None else None,
                     "short": round(float(sv), 4) if sv is not None else None,
@@ -183,17 +178,13 @@ def run_cbf():
         print(f"    Got {len(broker_data)} symbols")
         for symbol, rates in broker_data.items():
             output.setdefault(symbol, {})[broker_key] = rates
-    brokers = set(b for sym in output.values() for b in sym.keys())
-    print(f"  Done. {len(output)} symbols, {len(brokers)} brokers")
+    print(f"  Done. {len(output)} symbols")
     return output
 
 # ─────────────────────────────────────────
-# HF MARKETS — Playwright with extended timeout
+# HF MARKETS — Playwright, dismiss cookie banner first
 # ─────────────────────────────────────────
-HF_URLS = [
-    "https://hfeu.com/en/trading-instruments/forex",
-    "https://www.hfm.com/eu/en/trading-tools/swap-rates/",
-]
+HF_URL = "https://hfeu.com/en/trading-instruments/forex"
 HF_TABS = {
     "Premium Account":     "hf-premium",
     "Premium Pro Account": "hf-pro",
@@ -222,40 +213,57 @@ def run_hfmarkets():
             page = browser.new_page(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
             )
-            loaded = False
-            for url in HF_URLS:
-                try:
-                    print(f"  Trying {url}")
-                    page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                    time.sleep(5)
-                    loaded = True
-                    print(f"  Loaded OK")
-                    break
-                except Exception as e:
-                    print(f"  Failed: {e}")
+            print(f"  Loading {HF_URL}")
+            page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
+            time.sleep(4)
 
-            if loaded:
-                for tab_text, broker_key in HF_TABS.items():
-                    print(f"  Tab: {tab_text}")
-                    try:
-                        page.click(f"text={tab_text}", timeout=15000)
-                        time.sleep(3)
-                        rows = page.query_selector_all("table tbody tr")
-                        for row in rows:
-                            cells = row.query_selector_all("td")
-                            if len(cells) < 6:
-                                continue
-                            raw_sym = cells[0].inner_text().strip().upper()
-                            sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
-                            if sym not in OUR_SYMBOLS_SET:
-                                continue
-                            short = parse_rate(cells[4].inner_text())
-                            long  = parse_rate(cells[5].inner_text())
-                            results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
-                    except Exception as e:
-                        print(f"    Error on {tab_text}: {e}")
-            else:
-                print("  All HF URLs failed — skipping")
+            # Dismiss cookie banner if present
+            for selector in [
+                "#cookiescript_accept",
+                "#cookiescript_close",
+                "button:has-text('Accept')",
+                "button:has-text('Accept All')",
+                "button:has-text('OK')",
+                ".cookie-accept",
+                "[data-cs-action='accept']",
+            ]:
+                try:
+                    page.click(selector, timeout=3000)
+                    print(f"  Cookie banner dismissed via {selector}")
+                    time.sleep(1)
+                    break
+                except Exception:
+                    pass
+
+            # Also try JS dismiss as fallback
+            try:
+                page.evaluate("document.getElementById('cookiescript_injected_wrapper')?.remove()")
+                print("  Cookie overlay removed via JS")
+            except Exception:
+                pass
+
+            time.sleep(1)
+
+            for tab_text, broker_key in HF_TABS.items():
+                print(f"  Tab: {tab_text}")
+                try:
+                    page.click(f"text={tab_text}", timeout=10000)
+                    time.sleep(3)
+                    rows = page.query_selector_all("table tbody tr")
+                    print(f"    Found {len(rows)} rows")
+                    for row in rows:
+                        cells = row.query_selector_all("td")
+                        if len(cells) < 6:
+                            continue
+                        raw_sym = cells[0].inner_text().strip().upper()
+                        sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+                        if sym not in OUR_SYMBOLS_SET:
+                            continue
+                        short = parse_rate(cells[4].inner_text())
+                        long  = parse_rate(cells[5].inner_text())
+                        results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
+                except Exception as e:
+                    print(f"    Error on {tab_text}: {e}")
 
             browser.close()
     except Exception as e:
@@ -281,15 +289,14 @@ MYFXBOOK_BROKER_MAP = {
 def fetch_myfxbook(oid, long_or_short):
     url = (f"https://www.myfxbook.com/get-swap-chart-by-symbol.json"
            f"?symbolInfoOid={oid}&swapShortLong={long_or_short}&rand=0.5")
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Referer": "https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
-        "X-Requested-With": "XMLHttpRequest",
-    }
     try:
-        req = urllib.request.Request(url, headers=headers)
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
+            "X-Requested-With": "XMLHttpRequest",
+        })
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
         brokers = data.get("categories", [])
