@@ -1,115 +1,254 @@
 {
-  "updated_at": "2025-03-25 manual-import",
+  "updated_at": "2026-03-29 14:53 UTC",
   "sources": [
-    "exness-manual-f12"
+    "blackbull",
+    "exness-std",
+    "fpmarkets",
+    "icmarkets",
+    "pepperstone",
+    "tickmill",
+    "vantage",
+    "xm"
   ],
   "swaps": {
-    "SILVER": {
+    "USDCHF": {
       "exness-std": {
-        "long": -0.85,
-        "short": 0
+        "long": 0,
+        "short": -0.9800000000000001
       },
-      "exness-pro": {
-        "long": -0.85,
-        "short": 0
+      "icmarkets": {
+        "long": 7.741,
+        "short": -12.799
       },
-      "exness-zero": {
-        "long": -0.85,
-        "short": 0
+      "vantage": {
+        "long": 5.22,
+        "short": -12.73
       },
-      "exness-raw": {
-        "long": -0.85,
-        "short": 0
+      "blackbull": {
+        "long": 4.4964,
+        "short": -11.1727
+      },
+      "pepperstone": {
+        "long": 0.07,
+        "short": -0.2
+      },
+      "fpmarkets": {
+        "long": 0.12,
+        "short": -0.18
+      },
+      "xm": {
+        "long": -0.08,
+        "short": -0.44
+      },
+      "tickmill": {
+        "long": 0.26,
+        "short": -0.07
       }
     },
-    "GOLD": {
+    "AUDCHF": {
       "exness-std": {
-        "long": -55,
-        "short": 0
+        "long": 0,
+        "short": -0.9199999999999999
       },
-      "exness-pro": {
-        "long": -55,
-        "short": 0
+      "icmarkets": {
+        "long": 6.172,
+        "short": -9.318
       },
-      "exness-zero": {
-        "long": -55,
-        "short": 0
+      "vantage": {
+        "long": 4.55,
+        "short": -9.48
       },
-      "exness-raw": {
-        "long": -55,
-        "short": 0
+      "blackbull": {
+        "long": 3.5146,
+        "short": -8.6651
+      },
+      "pepperstone": {
+        "long": 0.03,
+        "short": -0.13
+      },
+      "fpmarkets": {
+        "long": 0.22,
+        "short": -0.29
+      },
+      "xm": {
+        "long": -0.02,
+        "short": -0.22
+      },
+      "tickmill": {
+        "long": 0.05,
+        "short": -0.12
       }
     },
-    "UKOIL": {
+    "USDCAD": {
       "exness-std": {
         "long": 0,
-        "short": -18.57
+        "short": -0.75
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -18.57
+      "icmarkets": {
+        "long": 3.272,
+        "short": -9.618
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -18.57
+      "blackbull": {
+        "long": 1.8592,
+        "short": -10.0639
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -18.57
-      }
-    },
-    "USOIL": {
-      "exness-std": {
-        "long": 0,
-        "short": -14.64
+      "pepperstone": {
+        "long": 0.07,
+        "short": -0.01
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -14.64
+      "fpmarkets": {
+        "long": 0.05,
+        "short": 0.02
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -14.64
+      "xm": {
+        "long": -0.05,
+        "short": -0.12
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -14.64
+      "tickmill": {
+        "long": 0.2,
+        "short": 0.12
       }
     },
     "NATGAS": {
+      "icmarkets": {
+        "long": 2.026,
+        "short": -7.791
+      },
+      "vantage": {
+        "long": -0.2,
+        "short": -3.2
+      },
+      "blackbull": {
+        "long": -3.528,
+        "short": -3.948
+      }
+    },
+    "USDJPY": {
       "exness-std": {
-        "long": -7.344,
-        "short": 0
+        "long": 0,
+        "short": -1.5
       },
-      "exness-pro": {
-        "long": -7.344,
-        "short": 0
+      "icmarkets": {
+        "long": 13.514,
+        "short": -19.916
       },
-      "exness-zero": {
-        "long": -7.344,
-        "short": 0
+      "blackbull": {
+        "long": 6.3961,
+        "short": -17.9685
       },
-      "exness-raw": {
-        "long": -7.344,
-        "short": 0
+      "pepperstone": {
+        "long": -0.2,
+        "short": -0.54
+      },
+      "fpmarkets": {
+        "long": 0.09,
+        "short": -0.4
+      },
+      "xm": {
+        "long": -0.69,
+        "short": -1.26
+      },
+      "tickmill": {
+        "long": 0.46,
+        "short": -0.29
+      }
+    },
+    "EURNZD": {
+      "exness-std": {
+        "long": -0.71,
+        "short": -0.11000000000000001
+      },
+      "icmarkets": {
+        "long": -8.986,
+        "short": 2.184
+      },
+      "vantage": {
+        "long": -7.45,
+        "short": -0.37
+      },
+      "blackbull": {
+        "long": -9.7836,
+        "short": -4.2968
+      },
+      "pepperstone": {
+        "long": -0.46,
+        "short": -0.53
+      },
+      "fpmarkets": {
+        "long": 0.13,
+        "short": -0.27
+      },
+      "xm": {
+        "long": -0.84,
+        "short": -0.26
+      },
+      "tickmill": {
+        "long": -0.25,
+        "short": 0.42
+      }
+    },
+    "NZDCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.45999999999999996
+      },
+      "icmarkets": {
+        "long": 2.974,
+        "short": -5.906
+      },
+      "vantage": {
+        "long": 1.88,
+        "short": -5.96
+      },
+      "blackbull": {
+        "long": 1.093,
+        "short": -5.1663
+      },
+      "pepperstone": {
+        "long": 0.02,
+        "short": -0.05
+      },
+      "fpmarkets": {
+        "long": 0.0,
+        "short": -0.03
+      },
+      "xm": {
+        "long": -0.01,
+        "short": -0.2
+      },
+      "tickmill": {
+        "long": 0.09,
+        "short": -0.09
       }
     },
     "AUDUSD": {
       "exness-std": {
-        "long": 0,
-        "short": -0.17
+        "long": -0.01,
+        "short": -0.16
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.17
+      "icmarkets": {
+        "long": -2.418,
+        "short": -3.918
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.17
+      "blackbull": {
+        "long": -1.2717,
+        "short": -2.7717
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.17
+      "pepperstone": {
+        "long": 0.18,
+        "short": 0.15
+      },
+      "fpmarkets": {
+        "long": 0.34,
+        "short": 0.06
+      },
+      "xm": {
+        "long": 0.08,
+        "short": 0.07
+      },
+      "tickmill": {
+        "long": 0.25,
+        "short": 0.22
       }
     },
     "EURUSD": {
@@ -117,359 +256,227 @@
         "long": -0.67,
         "short": 0
       },
-      "exness-pro": {
-        "long": -0.67,
-        "short": 0
+      "icmarkets": {
+        "long": -9.834,
+        "short": 4.026
       },
-      "exness-zero": {
-        "long": -0.67,
-        "short": 0
+      "blackbull": {
+        "long": -8.6638,
+        "short": 2.3362
       },
-      "exness-raw": {
-        "long": -0.67,
-        "short": 0
+      "pepperstone": {
+        "long": 0.05,
+        "short": 0.05
+      },
+      "fpmarkets": {
+        "long": 0.05,
+        "short": 0.01
+      },
+      "xm": {
+        "long": -0.2,
+        "short": 0.11
+      },
+      "tickmill": {
+        "long": 0.01,
+        "short": 0.31
       }
     },
-    "GBPUSD": {
+    "GOLD": {
       "exness-std": {
-        "long": -0.13,
-        "short": -0.14
-      },
-      "exness-pro": {
-        "long": -0.13,
-        "short": -0.14
-      },
-      "exness-zero": {
-        "long": -0.13,
-        "short": -0.14
-      },
-      "exness-raw": {
-        "long": -0.13,
-        "short": -0.14
-      }
-    },
-    "NZDUSD": {
-      "exness-std": {
-        "long": -0.31,
+        "long": -51,
         "short": 0
       },
-      "exness-pro": {
-        "long": -0.31,
-        "short": 0
+      "icmarkets": {
+        "long": -54.545,
+        "short": 45.678
       },
-      "exness-zero": {
-        "long": -0.31,
-        "short": 0
+      "vantage": {
+        "long": -68.81,
+        "short": 37.91
       },
-      "exness-raw": {
-        "long": -0.31,
-        "short": 0
+      "blackbull": {
+        "long": -74.1326,
+        "short": 28.8715
+      },
+      "pepperstone": {
+        "long": 16.58,
+        "short": -55.67
+      },
+      "fpmarkets": {
+        "long": -13.18,
+        "short": -16.95
+      },
+      "xm": {
+        "long": -43.59,
+        "short": -211.33
+      },
+      "tickmill": {
+        "long": -0.7,
+        "short": -2.07
       }
     },
-    "USDCAD": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.77
+    "UKOIL": {
+      "icmarkets": {
+        "long": 0.282,
+        "short": -2.148
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.77
+      "vantage": {
+        "long": 0.0,
+        "short": -148.7379
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.77
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.77
-      }
-    },
-    "USDCHF": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.96
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.96
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.96
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.96
-      }
-    },
-    "USDJPY": {
-      "exness-std": {
-        "long": 0,
-        "short": -1.53
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -1.53
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -1.53
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -1.53
-      }
-    },
-    "AUDCAD": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.84
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.84
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.84
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.84
-      }
-    },
-    "AUDCHF": {
-      "exness-std": {
-        "long": 0,
-        "short": -1.01
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -1.01
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -1.01
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -1.01
-      }
-    },
-    "AUDJPY": {
-      "exness-std": {
-        "long": -0.01,
-        "short": -0.23
-      },
-      "exness-pro": {
-        "long": -0.01,
-        "short": -0.23
-      },
-      "exness-zero": {
-        "long": -0.01,
-        "short": -0.23
-      },
-      "exness-raw": {
-        "long": -0.01,
-        "short": -0.23
-      }
-    },
-    "AUDNZD": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.98
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.98
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.98
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.98
-      }
-    },
-    "CADCHF": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.53
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.53
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.53
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.53
-      }
-    },
-    "CADJPY": {
-      "exness-std": {
-        "long": 0,
-        "short": -0.65
-      },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.65
-      },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.65
-      },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.65
-      }
-    },
-    "CHFJPY": {
-      "exness-std": {
-        "long": -0.87,
-        "short": 0
-      },
-      "exness-pro": {
-        "long": -0.87,
-        "short": 0
-      },
-      "exness-zero": {
-        "long": -0.87,
-        "short": 0
-      },
-      "exness-raw": {
-        "long": -0.87,
-        "short": 0
-      }
-    },
-    "EURAUD": {
-      "exness-std": {
-        "long": -1.39,
-        "short": 0
-      },
-      "exness-pro": {
-        "long": -1.39,
-        "short": 0
-      },
-      "exness-zero": {
-        "long": -1.39,
-        "short": 0
-      },
-      "exness-raw": {
-        "long": -1.39,
-        "short": 0
-      }
-    },
-    "EURCAD": {
-      "exness-std": {
-        "long": -0.32,
-        "short": -0.11
-      },
-      "exness-pro": {
-        "long": -0.32,
-        "short": -0.11
-      },
-      "exness-zero": {
-        "long": -0.32,
-        "short": -0.11
-      },
-      "exness-raw": {
-        "long": -0.32,
-        "short": -0.11
+      "blackbull": {
+        "long": 171.7268,
+        "short": -233.1567
       }
     },
     "EURCHF": {
       "exness-std": {
         "long": 0,
-        "short": -0.66
+        "short": -0.9
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.66
+      "icmarkets": {
+        "long": 3.449,
+        "short": -9.201
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.66
+      "vantage": {
+        "long": 2.21,
+        "short": -9.9
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.66
+      "blackbull": {
+        "long": 1.8057,
+        "short": -8.6914
+      },
+      "pepperstone": {
+        "long": 0.02,
+        "short": -0.13
+      },
+      "fpmarkets": {
+        "long": 0.17,
+        "short": -0.13
+      },
+      "xm": {
+        "long": -0.15,
+        "short": -0.3
+      },
+      "tickmill": {
+        "long": 0.06,
+        "short": -0.03
       }
     },
-    "EURGBP": {
+    "NZDCAD": {
       "exness-std": {
-        "long": -0.71,
-        "short": 0
+        "long": -0.06999999999999999,
+        "short": -0.2
       },
-      "exness-pro": {
-        "long": -0.71,
-        "short": 0
+      "icmarkets": {
+        "long": -0.187,
+        "short": -2.907
       },
-      "exness-zero": {
-        "long": -0.71,
-        "short": 0
+      "vantage": {
+        "long": -0.89,
+        "short": -2.99
       },
-      "exness-raw": {
-        "long": -0.71,
-        "short": 0
+      "blackbull": {
+        "long": -2.0765,
+        "short": -3.4765
+      },
+      "pepperstone": {
+        "long": -0.07,
+        "short": -0.08
+      },
+      "fpmarkets": {
+        "long": -0.06,
+        "short": 0.02
+      },
+      "xm": {
+        "long": -0.34,
+        "short": -0.52
+      },
+      "tickmill": {
+        "long": 0.13,
+        "short": -0.02
       }
     },
-    "EURJPY": {
+    "NZDJPY": {
       "exness-std": {
         "long": 0,
-        "short": -1.16
+        "short": -0.5599999999999999
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -1.16
+      "icmarkets": {
+        "long": 5.113,
+        "short": -8.117
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -1.16
+      "vantage": {
+        "long": 0.79,
+        "short": -6.62
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -1.16
+      "blackbull": {
+        "long": -0.0711,
+        "short": -7.7703
+      },
+      "pepperstone": {
+        "long": -0.19,
+        "short": -0.47
+      },
+      "fpmarkets": {
+        "long": -0.14,
+        "short": -0.13
+      },
+      "xm": {
+        "long": -0.43,
+        "short": -0.68
+      },
+      "tickmill": {
+        "long": 0.22,
+        "short": -0.19
       }
     },
-    "EURNZD": {
-      "exness-std": {
-        "long": -0.71,
-        "short": -0.11
+    "USOIL": {
+      "icmarkets": {
+        "long": 0.893,
+        "short": -2.795
       },
-      "exness-pro": {
-        "long": -0.71,
-        "short": -0.11
+      "vantage": {
+        "long": -25.0,
+        "short": -31.5444
       },
-      "exness-zero": {
-        "long": -0.71,
-        "short": -0.11
-      },
-      "exness-raw": {
-        "long": -0.71,
-        "short": -0.11
+      "blackbull": {
+        "long": 29.718,
+        "short": -81.508
       }
     },
-    "GBPAUD": {
+    "EURAUD": {
       "exness-std": {
-        "long": -0.6,
-        "short": -0.08
+        "long": -1.51,
+        "short": 0
       },
-      "exness-pro": {
-        "long": -0.6,
-        "short": -0.08
+      "icmarkets": {
+        "long": -14.861,
+        "short": 9.169
       },
-      "exness-zero": {
-        "long": -0.6,
-        "short": -0.08
+      "vantage": {
+        "long": -14.34,
+        "short": 6.07
       },
-      "exness-raw": {
-        "long": -0.6,
-        "short": -0.08
+      "blackbull": {
+        "long": -14.493,
+        "short": 4.207
+      },
+      "pepperstone": {
+        "long": -0.16,
+        "short": -0.12
+      },
+      "fpmarkets": {
+        "long": -0.37,
+        "short": 0.27
+      },
+      "xm": {
+        "long": -0.81,
+        "short": -0.25
+      },
+      "tickmill": {
+        "long": -0.21,
+        "short": 0.31
       }
     },
     "GBPCAD": {
@@ -477,53 +484,335 @@
         "long": 0,
         "short": -1.03
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -1.03
+      "icmarkets": {
+        "long": 5.078,
+        "short": -14.602
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -1.03
+      "vantage": {
+        "long": 2.3,
+        "short": -14.82
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -1.03
+      "blackbull": {
+        "long": 2.4805,
+        "short": -13.8195
+      },
+      "pepperstone": {
+        "long": 0.1,
+        "short": -0.12
+      },
+      "fpmarkets": {
+        "long": 0.27,
+        "short": -0.17
+      },
+      "xm": {
+        "long": -0.16,
+        "short": -0.45
+      },
+      "tickmill": {
+        "long": 0.42,
+        "short": 0.05
       }
     },
-    "GBPCHF": {
+    "SILVER": {
       "exness-std": {
-        "long": 0,
-        "short": -1.58
+        "long": -0.82,
+        "short": 0
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -1.58
+      "icmarkets": {
+        "long": -8.4874,
+        "short": 7.1796
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -1.58
+      "vantage": {
+        "long": -19.8,
+        "short": 4.62
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -1.58
+      "blackbull": {
+        "long": -28.7534,
+        "short": 3.2815
+      },
+      "pepperstone": {
+        "long": -2.85,
+        "short": 2.34
+      },
+      "fpmarkets": {
+        "long": -3.33,
+        "short": 2.59
+      },
+      "xm": {
+        "long": -3.36,
+        "short": 0.54
+      },
+      "tickmill": {
+        "long": -3.13,
+        "short": 2.75
       }
     },
-    "GBPJPY": {
+    "AUDJPY": {
+      "exness-std": {
+        "long": -0.01,
+        "short": -0.22000000000000003
+      },
+      "icmarkets": {
+        "long": 11.031,
+        "short": -14.369
+      },
+      "vantage": {
+        "long": 2.52,
+        "short": -12.51
+      },
+      "blackbull": {
+        "long": 4.3932,
+        "short": -14.3294
+      },
+      "pepperstone": {
+        "long": -0.21,
+        "short": -0.52
+      },
+      "fpmarkets": {
+        "long": 0.35,
+        "short": -0.59
+      },
+      "xm": {
+        "long": -0.23,
+        "short": -0.79
+      },
+      "tickmill": {
+        "long": 0.22,
+        "short": -0.23
+      }
+    },
+    "GBPAUD": {
+      "exness-std": {
+        "long": -0.48,
+        "short": -0.06999999999999999
+      },
+      "icmarkets": {
+        "long": -6.487,
+        "short": -4.127
+      },
+      "vantage": {
+        "long": -8.89,
+        "short": -3.67
+      },
+      "blackbull": {
+        "long": -7.9651,
+        "short": -4.2651
+      },
+      "pepperstone": {
+        "long": 0.15,
+        "short": 0.0
+      },
+      "fpmarkets": {
+        "long": -0.11,
+        "short": 0.49
+      },
+      "xm": {
+        "long": -0.34,
+        "short": -0.46
+      },
+      "tickmill": {
+        "long": 0.14,
+        "short": -0.16
+      }
+    },
+    "CHFJPY": {
+      "exness-std": {
+        "long": -0.8099999999999999,
+        "short": 0
+      },
+      "icmarkets": {
+        "long": -7.3228,
+        "short": 2.2772
+      },
+      "vantage": {
+        "long": -7.61,
+        "short": 0.84
+      },
+      "blackbull": {
+        "long": -12.1577,
+        "short": -1.7577
+      },
+      "pepperstone": {
+        "long": -0.59,
+        "short": -0.2
+      },
+      "fpmarkets": {
+        "long": -0.18,
+        "short": 0.2
+      },
+      "xm": {
+        "long": -0.95,
+        "short": -0.96
+      },
+      "tickmill": {
+        "long": -0.28,
+        "short": -0.37
+      }
+    },
+    "EURGBP": {
+      "exness-std": {
+        "long": -0.6900000000000001,
+        "short": 0
+      },
+      "icmarkets": {
+        "long": -8.102,
+        "short": 2.978
+      },
+      "vantage": {
+        "long": -7.77,
+        "short": 1.11
+      },
+      "blackbull": {
+        "long": -6.7807,
+        "short": 1.5193
+      },
+      "pepperstone": {
+        "long": 0.01,
+        "short": 0.06
+      },
+      "fpmarkets": {
+        "long": 0.02,
+        "short": 0.12
+      },
+      "xm": {
+        "long": -0.16,
+        "short": 0.14
+      },
+      "tickmill": {
+        "long": -0.01,
+        "short": 0.29
+      }
+    },
+    "GBPUSD": {
+      "exness-std": {
+        "long": -0.13,
+        "short": -0.16
+      },
+      "icmarkets": {
+        "long": -3.161,
+        "short": -4.131
+      },
+      "blackbull": {
+        "long": -3.654,
+        "short": -3.754
+      },
+      "pepperstone": {
+        "long": 0.14,
+        "short": 0.06
+      },
+      "fpmarkets": {
+        "long": 0.26,
+        "short": 0.05
+      },
+      "xm": {
+        "long": 0.02,
+        "short": -0.05
+      },
+      "tickmill": {
+        "long": 0.28,
+        "short": 0.15
+      }
+    },
+    "EURCAD": {
+      "exness-std": {
+        "long": -0.25,
+        "short": -0.22999999999999998
+      },
+      "icmarkets": {
+        "long": -4.637,
+        "short": -0.587
+      },
+      "vantage": {
+        "long": -4.15,
+        "short": -2.5
+      },
+      "blackbull": {
+        "long": -5.3836,
+        "short": -4.1836
+      },
+      "pepperstone": {
+        "long": -0.14,
+        "short": -0.18
+      },
+      "fpmarkets": {
+        "long": 0.09,
+        "short": -0.03
+      },
+      "xm": {
+        "long": -0.51,
+        "short": -0.25
+      },
+      "tickmill": {
+        "long": -0.28,
+        "short": -0.03
+      }
+    },
+    "AUDCAD": {
       "exness-std": {
         "long": 0,
-        "short": -2.25
+        "short": -0.97
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -2.25
+      "icmarkets": {
+        "long": 3.859,
+        "short": -7.361
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -2.25
+      "vantage": {
+        "long": 3.19,
+        "short": -8.11
       },
-      "exness-raw": {
+      "blackbull": {
+        "long": 2.0385,
+        "short": -8.4615
+      },
+      "pepperstone": {
+        "long": -0.08,
+        "short": -0.09
+      },
+      "fpmarkets": {
+        "long": 0.26,
+        "short": -0.25
+      },
+      "xm": {
+        "long": -0.13,
+        "short": -0.31
+      },
+      "tickmill": {
+        "long": -0.11,
+        "short": -0.11
+      }
+    },
+    "CADCHF": {
+      "exness-std": {
         "long": 0,
-        "short": -2.25
+        "short": -0.53
+      },
+      "icmarkets": {
+        "long": 2.99,
+        "short": -6.21
+      },
+      "vantage": {
+        "long": 1.81,
+        "short": -6.29
+      },
+      "blackbull": {
+        "long": 0.6857,
+        "short": -5.7389
+      },
+      "pepperstone": {
+        "long": -0.02,
+        "short": -0.13
+      },
+      "fpmarkets": {
+        "long": 0.04,
+        "short": -0.09
+      },
+      "xm": {
+        "long": 0.02,
+        "short": -0.17
+      },
+      "tickmill": {
+        "long": 0.17,
+        "short": -0.01
       }
     },
     "GBPNZD": {
@@ -531,71 +820,233 @@
         "long": -0.04,
         "short": -1.59
       },
-      "exness-pro": {
-        "long": -0.04,
-        "short": -1.59
+      "icmarkets": {
+        "long": 2.467,
+        "short": -14.043
       },
-      "exness-zero": {
-        "long": -0.04,
-        "short": -1.59
+      "vantage": {
+        "long": 0.71,
+        "short": -14.86
       },
-      "exness-raw": {
-        "long": -0.04,
-        "short": -1.59
+      "blackbull": {
+        "long": 0.7741,
+        "short": -16.0259
+      },
+      "pepperstone": {
+        "long": 0.08,
+        "short": -0.12
+      },
+      "fpmarkets": {
+        "long": 0.44,
+        "short": -0.16
+      },
+      "xm": {
+        "long": -0.58,
+        "short": -0.43
+      },
+      "tickmill": {
+        "long": 0.25,
+        "short": 0.27
       }
     },
-    "NZDCAD": {
+    "GBPCHF": {
       "exness-std": {
-        "long": -0.07,
-        "short": -0.2
+        "long": 0,
+        "short": -1.4300000000000002
       },
-      "exness-pro": {
-        "long": -0.07,
-        "short": -0.2
+      "icmarkets": {
+        "long": 8.778,
+        "short": -19.262
       },
-      "exness-zero": {
-        "long": -0.07,
-        "short": -0.2
+      "vantage": {
+        "long": 5.22,
+        "short": -19.46
       },
-      "exness-raw": {
-        "long": -0.07,
-        "short": -0.2
+      "blackbull": {
+        "long": 4.3939,
+        "short": -15.0395
+      },
+      "pepperstone": {
+        "long": 0.27,
+        "short": -0.34
+      },
+      "fpmarkets": {
+        "long": 0.35,
+        "short": -0.33
+      },
+      "xm": {
+        "long": 0.19,
+        "short": -0.34
+      },
+      "tickmill": {
+        "long": 0.61,
+        "short": -0.08
       }
     },
-    "NZDCHF": {
+    "NZDUSD": {
       "exness-std": {
-        "long": 0,
-        "short": -0.46
+        "long": -0.31,
+        "short": 0
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.46
+      "icmarkets": {
+        "long": -3.668,
+        "short": 0.072
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.46
+      "blackbull": {
+        "long": -4.0591,
+        "short": 0.3409
       },
-      "exness-raw": {
-        "long": 0,
-        "short": -0.46
+      "pepperstone": {
+        "long": 0.03,
+        "short": 0.03
+      },
+      "fpmarkets": {
+        "long": 0.04,
+        "short": 0.09
+      },
+      "xm": {
+        "long": 0.04,
+        "short": -0.04
+      },
+      "tickmill": {
+        "long": 0.13,
+        "short": 0.08
       }
     },
-    "NZDJPY": {
+    "EURJPY": {
       "exness-std": {
         "long": 0,
-        "short": -0.56
+        "short": -0.96
       },
-      "exness-pro": {
-        "long": 0,
-        "short": -0.56
+      "icmarkets": {
+        "long": 5.898,
+        "short": -10.472
       },
-      "exness-zero": {
-        "long": 0,
-        "short": -0.56
+      "vantage": {
+        "long": 1.4,
+        "short": -9.42
       },
-      "exness-raw": {
+      "blackbull": {
+        "long": 1.242,
+        "short": -12.458
+      },
+      "pepperstone": {
+        "long": -0.4,
+        "short": -0.76
+      },
+      "fpmarkets": {
+        "long": 0.0,
+        "short": -0.15
+      },
+      "xm": {
+        "long": -0.91,
+        "short": -1.23
+      },
+      "tickmill": {
+        "long": 0.09,
+        "short": -0.12
+      }
+    },
+    "GBPJPY": {
+      "exness-std": {
         "long": 0,
-        "short": -0.56
+        "short": -2.17
+      },
+      "icmarkets": {
+        "long": 18.862,
+        "short": -27.328
+      },
+      "vantage": {
+        "long": 5.68,
+        "short": -22.71
+      },
+      "blackbull": {
+        "long": 6.778,
+        "short": -24.5164
+      },
+      "pepperstone": {
+        "long": -0.23,
+        "short": -1.09
+      },
+      "fpmarkets": {
+        "long": 0.25,
+        "short": -0.65
+      },
+      "xm": {
+        "long": -0.94,
+        "short": -1.8
+      },
+      "tickmill": {
+        "long": 0.27,
+        "short": -0.92
+      }
+    },
+    "CADJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.63
+      },
+      "icmarkets": {
+        "long": 4.794,
+        "short": -7.936
+      },
+      "vantage": {
+        "long": 1.74,
+        "short": -6.67
+      },
+      "blackbull": {
+        "long": 0.0517,
+        "short": -8.4773
+      },
+      "pepperstone": {
+        "long": -0.3,
+        "short": -0.43
+      },
+      "fpmarkets": {
+        "long": -0.02,
+        "short": -0.15
+      },
+      "xm": {
+        "long": -0.32,
+        "short": -0.65
+      },
+      "tickmill": {
+        "long": 0.16,
+        "short": -0.15
+      }
+    },
+    "AUDNZD": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.9800000000000001
+      },
+      "icmarkets": {
+        "long": 3.174,
+        "short": -7.436
+      },
+      "vantage": {
+        "long": 2.45,
+        "short": -8.56
+      },
+      "blackbull": {
+        "long": 1.1987,
+        "short": -10.6625
+      },
+      "pepperstone": {
+        "long": -0.09,
+        "short": -0.15
+      },
+      "fpmarkets": {
+        "long": 0.41,
+        "short": -0.37
+      },
+      "xm": {
+        "long": -0.71,
+        "short": -0.73
+      },
+      "tickmill": {
+        "long": 0.02,
+        "short": 0.06
       }
     }
   }
