@@ -1,5 +1,5 @@
 """
-SwapHunter Data Pipeline v5
+SwapHunter Data Pipeline v6
 """
 
 import json
@@ -34,7 +34,7 @@ OUR_SYMBOLS_SET = {
 }
 
 # ─────────────────────────────────────────
-# EXNESS — GraphQL API
+# EXNESS — GraphQL API (std only until auth solved)
 # ─────────────────────────────────────────
 METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
 
@@ -49,37 +49,6 @@ GRAPHQL_QUERY = (
     "  }\n"
     "}"
 )
-
-# Probe query — fetch ALL account types from Exness to discover valid strings
-PROBE_QUERY = (
-    "query { allExnessAccountTypes { account_type display_name __typename } }"
-)
-
-def probe_exness_account_types():
-    """Print all valid Exness account type strings for debugging."""
-    payload = json.dumps({"operationName": None, "query": PROBE_QUERY, "variables": {}}).encode()
-    try:
-        req = urllib.request.Request(
-            "https://www.exness.com/pwapi/",
-            data=payload,
-            headers={
-                "Content-Type": "application/json",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Origin": "https://www.exness.com",
-                "Referer": "https://www.exness.com/trading/swap-rates/",
-            },
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode())
-        types = data.get("data", {}).get("allExnessAccountTypes") or []
-        print(f"  Available Exness account types:")
-        for t in types:
-            print(f"    {t.get('account_type')} — {t.get('display_name')}")
-        return [t.get("account_type") for t in types if t.get("account_type")]
-    except Exception as e:
-        print(f"  Probe failed: {e}")
-        return []
 
 def fetch_exness_single(account_type):
     instruments = [METAL_MAP.get(s, s + "m") for s in OUR_SYMBOLS]
@@ -110,49 +79,23 @@ def fetch_exness_single(account_type):
             result[canon] = {"long": item["swap_long"], "short": item["swap_short"]}
     return result
 
-# Confirmed working + candidates for pro/zero/raw
 EXNESS_ACCOUNTS = {
-    "exness-std":  ["mt5_mini_real_vc"],
-    "exness-pro":  ["mt5_pro_real_vc", "mt5_classic_real_vc", "mt5_standard_plus_real_vc", "mt5_professional_real_vc"],
-    "exness-zero": ["mt5_zero_spread_real_vc", "mt5_zero_real_vc", "mt5_zerospread_real_vc"],
-    "exness-raw":  ["mt5_raw_spread_real_vc", "mt5_raw_real_vc", "mt5_rawspread_real_vc"],
+    "exness-std": "mt5_mini_real_vc",
 }
 
 def run_exness():
-    print("── Exness (4 servers) ──")
-
-    # First probe to discover valid account types
-    valid_types = probe_exness_account_types()
-    time.sleep(2)
-
+    print("── Exness (std only — pro/zero/raw require auth investigation) ──")
     output = {}
-    for account_key, type_candidates in EXNESS_ACCOUNTS.items():
-        print(f"  Fetching {account_key}...")
-        result = {}
-
-        # If probe returned types, add any new candidates we don't already have
-        all_candidates = list(type_candidates)
-        for vt in valid_types:
-            if vt not in all_candidates:
-                all_candidates.append(vt)
-
-        for account_type in all_candidates:
-            try:
-                print(f"    Trying {account_type}...")
-                result = fetch_exness_single(account_type)
-                if result:
-                    print(f"    ✓ Got {len(result)} symbols with {account_type}")
-                    break
-                else:
-                    print(f"    0 symbols")
-            except Exception as e:
-                print(f"    Error: {e}")
-            time.sleep(2)
-
-        for symbol, rates in result.items():
-            output.setdefault(symbol, {})[account_key] = rates
-        time.sleep(3)
-
+    for account_key, account_type in EXNESS_ACCOUNTS.items():
+        print(f"  Fetching {account_key} ({account_type})...")
+        try:
+            result = fetch_exness_single(account_type)
+            print(f"    Got {len(result)} symbols")
+            for symbol, rates in result.items():
+                output.setdefault(symbol, {})[account_key] = rates
+        except Exception as e:
+            print(f"    Error: {e}")
+        time.sleep(2)
     brokers_found = set(b for sym in output.values() for b in sym.keys())
     print(f"  Done. Brokers found: {brokers_found}")
     return output
@@ -218,22 +161,23 @@ def run_cbf():
     return output
 
 # ─────────────────────────────────────────
-# HF MARKETS — click by button ID, not text
+# HF MARKETS — extract all tables via JS, no clicking needed
 # ─────────────────────────────────────────
 HF_URL = "https://hfeu.com/en/trading-instruments/forex"
-# Tab button IDs discovered from page source
-HF_TABS = {
-    "#premium-button":     "hf-premium",
-    "#premium-pro-button": "hf-pro",
-    "#zero-button":        "hf-zero",
+
+# Map container IDs to broker keys (from page source)
+HF_CONTAINERS = {
+    "premium-table-container": "hf-premium",
+    "premium-pro-table-container": "hf-pro",
+    "zero-table-container": "hf-zero",
 }
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
 
 def parse_rate(val):
-    if not val or val.strip() in ("-", "—", "N/A", ""):
+    if not val or str(val).strip() in ("-", "—", "N/A", ""):
         return None
     try:
-        return round(float(val.strip().replace(",", ".")), 4)
+        return round(float(str(val).strip().replace(",", ".")), 4)
     except Exception:
         return None
 
@@ -252,49 +196,62 @@ def run_hfmarkets():
             )
             print(f"  Loading {HF_URL}")
             page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
-            time.sleep(4)
+            time.sleep(5)
 
-            # Dismiss cookie banner
-            for selector in ["#cookiescript_accept", "[data-cs-action='accept']", "button:has-text('Accept All')", "button:has-text('Accept')"]:
-                try:
-                    page.click(selector, timeout=3000)
-                    print(f"  Cookie dismissed via {selector}")
-                    time.sleep(1)
-                    break
-                except Exception:
-                    pass
-
-            # Remove overlay via JS as fallback
+            # Remove cookie overlay via JS
             page.evaluate("""
-                const el = document.getElementById('cookiescript_injected_wrapper');
-                if (el) el.remove();
-                const el2 = document.getElementById('cookiescript_injected');
-                if (el2) el2.remove();
+                ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.remove();
+                });
             """)
             time.sleep(1)
-            print("  Cookie overlay removed")
 
-            for btn_selector, broker_key in HF_TABS.items():
-                print(f"  Tab: {btn_selector} -> {broker_key}")
-                try:
-                    # Click by ID selector
-                    page.click(btn_selector, timeout=8000)
-                    time.sleep(3)
-                    rows = page.query_selector_all("table tbody tr")
-                    print(f"    Found {len(rows)} rows")
-                    for row in rows:
-                        cells = row.query_selector_all("td")
-                        if len(cells) < 6:
-                            continue
-                        raw_sym = cells[0].inner_text().strip().upper()
-                        sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
-                        if sym not in OUR_SYMBOLS_SET:
-                            continue
-                        short = parse_rate(cells[4].inner_text())
-                        long  = parse_rate(cells[5].inner_text())
-                        results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
-                except Exception as e:
-                    print(f"    Error: {e}")
+            # Extract ALL table data via JS — no clicking needed
+            # All tab containers exist in DOM, just hidden via CSS
+            table_data = page.evaluate("""
+                () => {
+                    const containers = {
+                        'premium-table-container': 'hf-premium',
+                        'premium-pro-table-container': 'hf-pro',
+                        'zero-table-container': 'hf-zero'
+                    };
+                    const result = {};
+                    for (const [containerId, brokerKey] of Object.entries(containers)) {
+                        const container = document.getElementById(containerId);
+                        if (!container) { result[brokerKey] = {found: false}; continue; }
+                        const rows = container.querySelectorAll('table tbody tr');
+                        const rowData = [];
+                        rows.forEach(row => {
+                            const cells = row.querySelectorAll('td');
+                            if (cells.length >= 6) {
+                                rowData.push({
+                                    symbol: cells[0].innerText.trim(),
+                                    col4: cells[4].innerText.trim(),
+                                    col5: cells[5].innerText.trim()
+                                });
+                            }
+                        });
+                        result[brokerKey] = {found: true, rows: rowData.length, data: rowData};
+                    }
+                    return result;
+                }
+            """)
+
+            print(f"  JS extraction result: {json.dumps({k: v.get('rows', 'not found') for k, v in table_data.items()})}")
+
+            for broker_key, container_data in table_data.items():
+                if not container_data.get("found"):
+                    print(f"  Container not found for {broker_key}")
+                    continue
+                for row in container_data.get("data", []):
+                    raw_sym = row["symbol"].upper()
+                    sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+                    if sym not in OUR_SYMBOLS_SET:
+                        continue
+                    short = parse_rate(row["col4"])
+                    long  = parse_rate(row["col5"])
+                    results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
 
             browser.close()
     except Exception as e:
