@@ -1,5 +1,5 @@
 """
-SwapHunter Data Pipeline v6
+SwapHunter Data Pipeline v7
 """
 
 import json
@@ -34,7 +34,7 @@ OUR_SYMBOLS_SET = {
 }
 
 # ─────────────────────────────────────────
-# EXNESS — GraphQL API (std only until auth solved)
+# EXNESS — std only
 # ─────────────────────────────────────────
 METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
 
@@ -79,29 +79,20 @@ def fetch_exness_single(account_type):
             result[canon] = {"long": item["swap_long"], "short": item["swap_short"]}
     return result
 
-EXNESS_ACCOUNTS = {
-    "exness-std": "mt5_mini_real_vc",
-}
-
 def run_exness():
-    print("── Exness (std only — pro/zero/raw require auth investigation) ──")
+    print("── Exness (std only) ──")
     output = {}
-    for account_key, account_type in EXNESS_ACCOUNTS.items():
-        print(f"  Fetching {account_key} ({account_type})...")
-        try:
-            result = fetch_exness_single(account_type)
-            print(f"    Got {len(result)} symbols")
-            for symbol, rates in result.items():
-                output.setdefault(symbol, {})[account_key] = rates
-        except Exception as e:
-            print(f"    Error: {e}")
-        time.sleep(2)
-    brokers_found = set(b for sym in output.values() for b in sym.keys())
-    print(f"  Done. Brokers found: {brokers_found}")
+    try:
+        result = fetch_exness_single("mt5_mini_real_vc")
+        print(f"  Got {len(result)} symbols")
+        for symbol, rates in result.items():
+            output.setdefault(symbol, {})["exness-std"] = rates
+    except Exception as e:
+        print(f"  Error: {e}")
     return output
 
 # ─────────────────────────────────────────
-# CASHBACKFOREX — IC Markets, Vantage, BlackBull
+# CASHBACKFOREX
 # ─────────────────────────────────────────
 CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
 
@@ -161,16 +152,9 @@ def run_cbf():
     return output
 
 # ─────────────────────────────────────────
-# HF MARKETS — extract all tables via JS, no clicking needed
+# HF MARKETS — JS extraction, find correct container IDs
 # ─────────────────────────────────────────
 HF_URL = "https://hfeu.com/en/trading-instruments/forex"
-
-# Map container IDs to broker keys (from page source)
-HF_CONTAINERS = {
-    "premium-table-container": "hf-premium",
-    "premium-pro-table-container": "hf-pro",
-    "zero-table-container": "hf-zero",
-}
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
 
 def parse_rate(val):
@@ -180,6 +164,12 @@ def parse_rate(val):
         return round(float(str(val).strip().replace(",", ".")), 4)
     except Exception:
         return None
+
+def normalize_symbol(raw):
+    """Strip suffixes like .p, .c, spaces etc and uppercase"""
+    import re
+    cleaned = re.sub(r'[^A-Z]', '', raw.upper())
+    return cleaned
 
 def run_hfmarkets():
     print("── HF Markets (Premium, Pro, Zero) ──")
@@ -198,60 +188,95 @@ def run_hfmarkets():
             page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
             time.sleep(5)
 
-            # Remove cookie overlay via JS
+            # Remove cookie overlay
             page.evaluate("""
                 ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.remove();
+                    const el = document.getElementById(id); if (el) el.remove();
                 });
             """)
             time.sleep(1)
 
-            # Extract ALL table data via JS — no clicking needed
-            # All tab containers exist in DOM, just hidden via CSS
-            table_data = page.evaluate("""
+            # First: discover all table container IDs on the page
+            container_ids = page.evaluate("""
                 () => {
-                    const containers = {
-                        'premium-table-container': 'hf-premium',
-                        'premium-pro-table-container': 'hf-pro',
-                        'zero-table-container': 'hf-zero'
-                    };
+                    const all = document.querySelectorAll('[id*="table-container"], [id*="table_container"]');
+                    return Array.from(all).map(el => el.id);
+                }
+            """)
+            print(f"  Found container IDs: {container_ids}")
+
+            # Also print first 5 symbol names from the premium container to debug format
+            sample_syms = page.evaluate("""
+                () => {
+                    const containers = document.querySelectorAll('[id*="table-container"]');
+                    const samples = [];
+                    containers.forEach(c => {
+                        const rows = c.querySelectorAll('table tbody tr');
+                        rows.forEach((row, i) => {
+                            if (i < 3) {
+                                const cells = row.querySelectorAll('td');
+                                if (cells.length > 0) samples.push(c.id + ':' + cells[0].innerText.trim());
+                            }
+                        });
+                    });
+                    return samples;
+                }
+            """)
+            print(f"  Sample symbols: {sample_syms[:10]}")
+
+            # Map container IDs to broker keys — use whatever IDs we found
+            container_map = {}
+            for cid in container_ids:
+                cid_lower = cid.lower()
+                if "pro" in cid_lower and "premium" not in cid_lower:
+                    container_map[cid] = "hf-pro"
+                elif "premium" in cid_lower and "pro" not in cid_lower:
+                    container_map[cid] = "hf-premium"
+                elif "zero" in cid_lower:
+                    container_map[cid] = "hf-zero"
+            print(f"  Container map: {container_map}")
+
+            # Extract all tables
+            table_data = page.evaluate("""
+                (containerMap) => {
                     const result = {};
-                    for (const [containerId, brokerKey] of Object.entries(containers)) {
+                    for (const [containerId, brokerKey] of Object.entries(containerMap)) {
                         const container = document.getElementById(containerId);
-                        if (!container) { result[brokerKey] = {found: false}; continue; }
+                        if (!container) { result[brokerKey] = []; continue; }
                         const rows = container.querySelectorAll('table tbody tr');
                         const rowData = [];
                         rows.forEach(row => {
                             const cells = row.querySelectorAll('td');
                             if (cells.length >= 6) {
-                                rowData.push({
-                                    symbol: cells[0].innerText.trim(),
-                                    col4: cells[4].innerText.trim(),
-                                    col5: cells[5].innerText.trim()
-                                });
+                                rowData.push([
+                                    cells[0].innerText.trim(),
+                                    cells[4].innerText.trim(),
+                                    cells[5].innerText.trim()
+                                ]);
                             }
                         });
-                        result[brokerKey] = {found: true, rows: rowData.length, data: rowData};
+                        result[brokerKey] = rowData;
                     }
                     return result;
                 }
-            """)
+            """, container_map)
 
-            print(f"  JS extraction result: {json.dumps({k: v.get('rows', 'not found') for k, v in table_data.items()})}")
-
-            for broker_key, container_data in table_data.items():
-                if not container_data.get("found"):
-                    print(f"  Container not found for {broker_key}")
-                    continue
-                for row in container_data.get("data", []):
-                    raw_sym = row["symbol"].upper()
-                    sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+            for broker_key, rows in table_data.items():
+                matched = 0
+                for row in rows:
+                    raw_sym = row[0]
+                    # Try direct match first, then normalized
+                    sym = HF_SYMBOL_MAP.get(raw_sym.upper(), raw_sym.upper())
+                    if sym not in OUR_SYMBOLS_SET:
+                        sym = normalize_symbol(raw_sym)
+                        sym = HF_SYMBOL_MAP.get(sym, sym)
                     if sym not in OUR_SYMBOLS_SET:
                         continue
-                    short = parse_rate(row["col4"])
-                    long  = parse_rate(row["col5"])
+                    short = parse_rate(row[1])
+                    long  = parse_rate(row[2])
                     results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
+                    matched += 1
+                print(f"  {broker_key}: {len(rows)} rows, {matched} matched")
 
             browser.close()
     except Exception as e:
