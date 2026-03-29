@@ -1,5 +1,6 @@
 """
-SwapHunter Data Pipeline v8
+SwapHunter Data Pipeline v9 — HF Markets column mapping confirmed
+col[1] = symbol, col[5] = swap_short, col[6] = swap_long
 """
 
 import json
@@ -19,9 +20,7 @@ SYMBOL_OIDS = {
     "GBPNZD": 116070, "NZDCHF": 116071, "SILVER": 116072,
     "GOLD":   116073, "CADCHF": 116082, "GBPAUD": 116083,
 }
-
 OUR_SYMBOLS = list(SYMBOL_OIDS.keys())
-
 OUR_SYMBOLS_SET = {
     "EURUSD","GBPUSD","USDJPY","GBPJPY","USDCAD","EURAUD","EURJPY",
     "AUDCAD","AUDJPY","AUDNZD","AUDUSD","CADJPY","EURCAD","EURCHF",
@@ -30,9 +29,7 @@ OUR_SYMBOLS_SET = {
     "CADCHF","GBPAUD","UKOIL","USOIL","NATGAS",
 }
 
-# ─────────────────────────────────────────
-# EXNESS
-# ─────────────────────────────────────────
+# ── EXNESS ──
 METAL_MAP = {"GOLD": "XAUUSDm", "SILVER": "XAGUSDm"}
 GRAPHQL_QUERY = (
     "query getTradingInstruments($account_type: String!, $instruments: [String]) {\n"
@@ -59,7 +56,8 @@ def run_exness():
     try:
         req = urllib.request.Request(
             "https://www.exness.com/pwapi/", data=payload,
-            headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0","Origin":"https://www.exness.com","Referer":"https://www.exness.com/trading/swap-rates/"},
+            headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0",
+                     "Origin":"https://www.exness.com","Referer":"https://www.exness.com/trading/swap-rates/"},
             method="POST"
         )
         with urllib.request.urlopen(req, timeout=20) as resp:
@@ -73,9 +71,7 @@ def run_exness():
         print(f"  Error: {e}")
     return output
 
-# ─────────────────────────────────────────
-# CASHBACKFOREX
-# ─────────────────────────────────────────
+# ── CASHBACKFOREX ──
 CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
 CBF_BROKERS = {
     3133: {"key": "icmarkets", "groups": ["Forex Majors", "Forex Minors", "Metals", "Energies"]},
@@ -122,11 +118,14 @@ def run_cbf():
             output.setdefault(sym,{})[broker_key] = rates
     return output
 
-# ─────────────────────────────────────────
-# HF MARKETS — debug row structure to find symbol column
-# ─────────────────────────────────────────
+# ── HF MARKETS — confirmed column mapping: sym=1, short=5, long=6 ──
 HF_URL = "https://hfeu.com/en/trading-instruments/forex"
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
+HF_CONTAINERS = {
+    "premium-table-container": "hf-premium",
+    "pro-table-container":     "hf-pro",
+    "zero-table-container":    "hf-zero",
+}
 
 def parse_rate(val):
     if not val or str(val).strip() in ("-","—","N/A",""): return None
@@ -143,6 +142,7 @@ def run_hfmarkets():
             page = browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
             page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
             time.sleep(5)
+            # Remove cookie overlay
             page.evaluate("""
                 ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
                     const el = document.getElementById(id); if (el) el.remove();
@@ -150,39 +150,52 @@ def run_hfmarkets():
             """)
             time.sleep(1)
 
-            # Debug: dump ALL cell text from first 3 rows of premium container
-            debug = page.evaluate("""
-                () => {
-                    const container = document.getElementById('premium-table-container');
-                    if (!container) return {error: 'container not found'};
-                    const rows = container.querySelectorAll('table tbody tr');
-                    const result = [];
-                    for (let i = 0; i < Math.min(3, rows.length); i++) {
-                        const cells = rows[i].querySelectorAll('td');
-                        const cellData = [];
-                        cells.forEach((cell, idx) => {
-                            cellData.push({
-                                idx: idx,
-                                innerText: cell.innerText.trim(),
-                                innerHTML: cell.innerHTML.trim().substring(0, 200)
-                            });
+            # Extract using confirmed column indices: sym=1, short=5, long=6
+            table_data = page.evaluate("""
+                (containers) => {
+                    const result = {};
+                    for (const [containerId, brokerKey] of Object.entries(containers)) {
+                        const container = document.getElementById(containerId);
+                        if (!container) { result[brokerKey] = []; continue; }
+                        const rows = container.querySelectorAll('table tbody tr');
+                        const rowData = [];
+                        rows.forEach(row => {
+                            const cells = row.querySelectorAll('td');
+                            if (cells.length >= 7) {
+                                rowData.push([
+                                    cells[1].innerText.trim(),  // symbol
+                                    cells[5].innerText.trim(),  // swap short
+                                    cells[6].innerText.trim()   // swap long
+                                ]);
+                            }
                         });
-                        result.push(cellData);
+                        result[brokerKey] = rowData;
                     }
                     return result;
                 }
-            """)
-            print(f"  DEBUG first 3 rows of premium container:")
-            print(json.dumps(debug, indent=2)[:2000])
+            """, HF_CONTAINERS)
+
+            for broker_key, rows in table_data.items():
+                matched = 0
+                for row in rows:
+                    raw_sym = row[0].upper()
+                    sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+                    if sym not in OUR_SYMBOLS_SET: continue
+                    short = parse_rate(row[1])
+                    long  = parse_rate(row[2])
+                    results.setdefault(sym, {})[broker_key] = {"long": long, "short": short}
+                    matched += 1
+                print(f"  {broker_key}: {len(rows)} rows → {matched} matched")
 
             browser.close()
     except Exception as e:
         print(f"  Exception: {e}")
+
+    brokers = set(b for s in results.values() for b in s.keys())
+    print(f"  Done. {len(results)} symbols, brokers: {brokers}")
     return results
 
-# ─────────────────────────────────────────
-# MYFXBOOK
-# ─────────────────────────────────────────
+# ── MYFXBOOK ──
 MYFXBOOK_BROKER_MAP = {
     "Pepperstone":"pepperstone","Tickmill":"tickmill",
     "XMTrading":"xm","XM":"xm","FP Markets":"fpmarkets",
@@ -231,9 +244,7 @@ def run_myfxbook():
     print(f"  Done. Brokers: {set(b for s in output.values() for b in s)}")
     return output
 
-# ─────────────────────────────────────────
-# MAIN
-# ─────────────────────────────────────────
+# ── MAIN ──
 def run():
     print(f"\nSwapHunter scraper — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
     exn_data = run_exness()
@@ -252,7 +263,11 @@ def run():
 
     brokers = set(b for s in merged.values() for b in s)
     with open("swaps.json","w") as f:
-        json.dump({"updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "sources": sorted(brokers), "swaps": merged}, f, indent=2)
+        json.dump({
+            "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            "sources": sorted(brokers),
+            "swaps": merged
+        }, f, indent=2)
 
     total = sum(len(v) for v in merged.values())
     print(f"\n✓ Done — {len(merged)} symbols, {len(brokers)} brokers, {total} entries")
