@@ -1,0 +1,602 @@
+{
+  "updated_at": "2025-03-25 manual-import",
+  "sources": [
+    "exness-manual-f12"
+  ],
+  "swaps": {
+    "SILVER": {
+      "exness-std": {
+        "long": -0.85,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -0.85,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -0.85,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -0.85,
+        "short": 0
+      }
+    },
+    "GOLD": {
+      "exness-std": {
+        "long": -55,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -55,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -55,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -55,
+        "short": 0
+      }
+    },
+    "UKOIL": {
+      "exness-std": {
+        "long": 0,
+        "short": -18.57
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -18.57
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -18.57
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -18.57
+      }
+    },
+    "USOIL": {
+      "exness-std": {
+        "long": 0,
+        "short": -14.64
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -14.64
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -14.64
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -14.64
+      }
+    },
+    "NATGAS": {
+      "exness-std": {
+        "long": -7.344,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -7.344,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -7.344,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -7.344,
+        "short": 0
+      }
+    },
+    "AUDUSD": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.17
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.17
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.17
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.17
+      }
+    },
+    "EURUSD": {
+      "exness-std": {
+        "long": -0.67,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -0.67,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -0.67,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -0.67,
+        "short": 0
+      }
+    },
+    "GBPUSD": {
+      "exness-std": {
+        "long": -0.13,
+        "short": -0.14
+      },
+      "exness-pro": {
+        "long": -0.13,
+        "short": -0.14
+      },
+      "exness-zero": {
+        "long": -0.13,
+        "short": -0.14
+      },
+      "exness-raw": {
+        "long": -0.13,
+        "short": -0.14
+      }
+    },
+    "NZDUSD": {
+      "exness-std": {
+        "long": -0.31,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -0.31,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -0.31,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -0.31,
+        "short": 0
+      }
+    },
+    "USDCAD": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.77
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.77
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.77
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.77
+      }
+    },
+    "USDCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.96
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.96
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.96
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.96
+      }
+    },
+    "USDJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -1.53
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -1.53
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -1.53
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -1.53
+      }
+    },
+    "AUDCAD": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.84
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.84
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.84
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.84
+      }
+    },
+    "AUDCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -1.01
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -1.01
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -1.01
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -1.01
+      }
+    },
+    "AUDJPY": {
+      "exness-std": {
+        "long": -0.01,
+        "short": -0.23
+      },
+      "exness-pro": {
+        "long": -0.01,
+        "short": -0.23
+      },
+      "exness-zero": {
+        "long": -0.01,
+        "short": -0.23
+      },
+      "exness-raw": {
+        "long": -0.01,
+        "short": -0.23
+      }
+    },
+    "AUDNZD": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.98
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.98
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.98
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.98
+      }
+    },
+    "CADCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.53
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.53
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.53
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.53
+      }
+    },
+    "CADJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.65
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.65
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.65
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.65
+      }
+    },
+    "CHFJPY": {
+      "exness-std": {
+        "long": -0.87,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -0.87,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -0.87,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -0.87,
+        "short": 0
+      }
+    },
+    "EURAUD": {
+      "exness-std": {
+        "long": -1.39,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -1.39,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -1.39,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -1.39,
+        "short": 0
+      }
+    },
+    "EURCAD": {
+      "exness-std": {
+        "long": -0.32,
+        "short": -0.11
+      },
+      "exness-pro": {
+        "long": -0.32,
+        "short": -0.11
+      },
+      "exness-zero": {
+        "long": -0.32,
+        "short": -0.11
+      },
+      "exness-raw": {
+        "long": -0.32,
+        "short": -0.11
+      }
+    },
+    "EURCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.66
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.66
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.66
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.66
+      }
+    },
+    "EURGBP": {
+      "exness-std": {
+        "long": -0.71,
+        "short": 0
+      },
+      "exness-pro": {
+        "long": -0.71,
+        "short": 0
+      },
+      "exness-zero": {
+        "long": -0.71,
+        "short": 0
+      },
+      "exness-raw": {
+        "long": -0.71,
+        "short": 0
+      }
+    },
+    "EURJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -1.16
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -1.16
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -1.16
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -1.16
+      }
+    },
+    "EURNZD": {
+      "exness-std": {
+        "long": -0.71,
+        "short": -0.11
+      },
+      "exness-pro": {
+        "long": -0.71,
+        "short": -0.11
+      },
+      "exness-zero": {
+        "long": -0.71,
+        "short": -0.11
+      },
+      "exness-raw": {
+        "long": -0.71,
+        "short": -0.11
+      }
+    },
+    "GBPAUD": {
+      "exness-std": {
+        "long": -0.6,
+        "short": -0.08
+      },
+      "exness-pro": {
+        "long": -0.6,
+        "short": -0.08
+      },
+      "exness-zero": {
+        "long": -0.6,
+        "short": -0.08
+      },
+      "exness-raw": {
+        "long": -0.6,
+        "short": -0.08
+      }
+    },
+    "GBPCAD": {
+      "exness-std": {
+        "long": 0,
+        "short": -1.03
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -1.03
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -1.03
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -1.03
+      }
+    },
+    "GBPCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -1.58
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -1.58
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -1.58
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -1.58
+      }
+    },
+    "GBPJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -2.25
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -2.25
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -2.25
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -2.25
+      }
+    },
+    "GBPNZD": {
+      "exness-std": {
+        "long": -0.04,
+        "short": -1.59
+      },
+      "exness-pro": {
+        "long": -0.04,
+        "short": -1.59
+      },
+      "exness-zero": {
+        "long": -0.04,
+        "short": -1.59
+      },
+      "exness-raw": {
+        "long": -0.04,
+        "short": -1.59
+      }
+    },
+    "NZDCAD": {
+      "exness-std": {
+        "long": -0.07,
+        "short": -0.2
+      },
+      "exness-pro": {
+        "long": -0.07,
+        "short": -0.2
+      },
+      "exness-zero": {
+        "long": -0.07,
+        "short": -0.2
+      },
+      "exness-raw": {
+        "long": -0.07,
+        "short": -0.2
+      }
+    },
+    "NZDCHF": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.46
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.46
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.46
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.46
+      }
+    },
+    "NZDJPY": {
+      "exness-std": {
+        "long": 0,
+        "short": -0.56
+      },
+      "exness-pro": {
+        "long": 0,
+        "short": -0.56
+      },
+      "exness-zero": {
+        "long": 0,
+        "short": -0.56
+      },
+      "exness-raw": {
+        "long": 0,
+        "short": -0.56
+      }
+    }
+  }
+}
