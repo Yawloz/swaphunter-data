@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-31 01:16 UTC",
+  "updated_at": "2026-03-31 04:27 UTC",
   "sources": [
     "blackbull",
     "eightcap",
@@ -16,108 +16,185 @@
     "xm"
   ],
   "swaps": {
-    "EURJPY": {
+    "CADJPY": {
       "icmarkets": {
-        "long": 5.898,
-        "short": -10.472,
+        "long": 4.794,
+        "short": -7.936,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 1.35,
-        "short": -9.23,
+        "long": 1.53,
+        "short": -6.18,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 1.242,
-        "short": -12.458,
+        "long": 0.0517,
+        "short": -8.4773,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": -1.73,
-        "short": -14.44,
+        "long": 0.48,
+        "short": -10.91,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 4.69,
-        "short": -9.52,
+        "long": 3.33,
+        "short": -6.37,
         "contractSize": 100000
       },
       "xm": {
-        "long": -6.42,
-        "short": -19.62,
+        "long": -1.68,
+        "short": -11.18,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 4.39,
-        "short": -10.42,
+        "long": 3.32,
+        "short": -8.17,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 3.02,
-        "short": -10.17,
+        "long": 1.94,
+        "short": -6.81,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 2.71,
-        "short": -12.75,
+        "long": 1.89,
+        "short": -8.44,
         "contractSize": 100000
       },
       "exness-std": {
         "long": 0,
-        "short": -1.4,
+        "short": -0.63,
         "contractSize": 100000
       },
       "hf-premium": {
-        "long": -0.4,
-        "short": -15.1,
+        "long": 0.0,
+        "short": -9.1,
         "contractSize": 100000
       },
       "hf-pro": {
-        "long": -0.4,
-        "short": -15.1,
+        "long": 0.0,
+        "short": -9.1,
         "contractSize": 100000
       },
       "hf-zero": {
-        "long": -0.4,
-        "short": -15.1,
+        "long": 0.0,
+        "short": -9.1,
         "contractSize": 100000
       }
     },
-    "NATGAS": {
+    "GOLD": {
       "icmarkets": {
-        "long": 2.026,
-        "short": -7.791,
-        "contractSize": 10000
-      },
-      "vantage": {
-        "long": -0.2,
-        "short": -3.4,
-        "contractSize": 10000
+        "long": -54.545,
+        "short": 45.678,
+        "contractSize": 100
       },
       "blackbull": {
-        "long": -3.528,
-        "short": -3.948,
-        "contractSize": 10000
+        "long": -74.1326,
+        "short": 28.8715,
+        "contractSize": 100
       },
       "pepperstone": {
-        "long": 0.32,
-        "short": -0.53,
-        "contractSize": 10000
+        "long": -110.22,
+        "short": 62.26,
+        "contractSize": 100
       },
       "tickmill": {
-        "long": -3.44,
-        "short": 0.89,
-        "contractSize": 10000
+        "long": -56.62,
+        "short": 44.98,
+        "contractSize": 100
+      },
+      "xm": {
+        "long": -124.4,
+        "short": 0.23,
+        "contractSize": 100
       },
       "fpmarkets": {
-        "long": -7.58,
-        "short": 2.72,
-        "contractSize": 10000
+        "long": -71.5,
+        "short": 32.5,
+        "contractSize": 100
       },
       "fusionmarkets": {
-        "long": 0.64,
-        "short": -6.9,
-        "contractSize": 10000
+        "long": -63.55,
+        "short": 30.36,
+        "contractSize": 100
+      },
+      "eightcap": {
+        "long": -82.04,
+        "short": 30.99,
+        "contractSize": 100
+      },
+      "exness-std": {
+        "long": -55.660000000000004,
+        "short": 0,
+        "contractSize": 100
+      }
+    },
+    "AUDJPY": {
+      "icmarkets": {
+        "long": 11.031,
+        "short": -14.369,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 2.35,
+        "short": -11.91,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 4.3932,
+        "short": -14.3294,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 5.84,
+        "short": -16.43,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 8.71,
+        "short": -12.22,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 3.09,
+        "short": -16.71,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 5.1,
+        "short": -10.9,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 5.92,
+        "short": -13.66,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 5.49,
+        "short": -16.85,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.01,
+        "short": -0.22000000000000003,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -14.8,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -14.8,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -14.8,
+        "contractSize": 100000
       }
     },
     "EURAUD": {
@@ -184,723 +261,6 @@
       "hf-zero": {
         "long": -14.2,
         "short": 0.0,
-        "contractSize": 100000
-      }
-    },
-    "USDCHF": {
-      "icmarkets": {
-        "long": 7.741,
-        "short": -12.799,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 5.14,
-        "short": -12.65,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 4.4964,
-        "short": -11.1727,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 5.76,
-        "short": -12.11,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 7.06,
-        "short": -10.17,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": 3.82,
-        "short": -13.28,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 5.97,
-        "short": -11.6,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 5.36,
-        "short": -13.42,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 4.34,
-        "short": -11.32,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -0.9800000000000001,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -12.6,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -12.6,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -12.6,
-        "contractSize": 100000
-      }
-    },
-    "GOLD": {
-      "icmarkets": {
-        "long": -54.545,
-        "short": 45.678,
-        "contractSize": 100
-      },
-      "blackbull": {
-        "long": -74.1326,
-        "short": 28.8715,
-        "contractSize": 100
-      },
-      "pepperstone": {
-        "long": -110.22,
-        "short": 62.26,
-        "contractSize": 100
-      },
-      "tickmill": {
-        "long": -56.62,
-        "short": 44.98,
-        "contractSize": 100
-      },
-      "xm": {
-        "long": -124.4,
-        "short": 0.23,
-        "contractSize": 100
-      },
-      "fpmarkets": {
-        "long": -71.5,
-        "short": 32.5,
-        "contractSize": 100
-      },
-      "fusionmarkets": {
-        "long": -63.55,
-        "short": 30.36,
-        "contractSize": 100
-      },
-      "eightcap": {
-        "long": -82.04,
-        "short": 30.99,
-        "contractSize": 100
-      },
-      "exness-std": {
-        "long": -55.660000000000004,
-        "short": 0,
-        "contractSize": 100
-      }
-    },
-    "EURCAD": {
-      "icmarkets": {
-        "long": -4.637,
-        "short": -0.587,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": -3.7,
-        "short": -2.83,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": -5.3836,
-        "short": -4.1836,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": -6.43,
-        "short": -2.03,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": -4.92,
-        "short": -3.35,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -6.67,
-        "short": -6.47,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": -4.91,
-        "short": 0.26,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": -2.91,
-        "short": -2.08,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": -3.85,
-        "short": -2.76,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.32,
-        "short": -0.13999999999999999,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": -5.0,
-        "short": -3.4,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": -5.0,
-        "short": -3.4,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": -5.0,
-        "short": -3.4,
-        "contractSize": 100000
-      }
-    },
-    "AUDCHF": {
-      "icmarkets": {
-        "long": 6.172,
-        "short": -9.318,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 4.23,
-        "short": -9.09,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 3.5146,
-        "short": -8.6651,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 4.82,
-        "short": -9.07,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 4.98,
-        "short": -8.78,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": 3.93,
-        "short": -9.57,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 3.31,
-        "short": -7.1,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 4.04,
-        "short": -10.08,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 3.28,
-        "short": -8.66,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -0.9199999999999999,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -8.4,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -8.4,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -8.4,
-        "contractSize": 100000
-      }
-    },
-    "USDJPY": {
-      "icmarkets": {
-        "long": 13.514,
-        "short": -19.916,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 7.55,
-        "short": -16.89,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 6.3961,
-        "short": -17.9685,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 8.12,
-        "short": -21.88,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 10.6,
-        "short": -15.37,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": 0.95,
-        "short": -26.85,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 9.54,
-        "short": -18.97,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 6.61,
-        "short": -18.54,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 6.7,
-        "short": -20.16,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -1.5,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -22.0,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -22.0,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -22.0,
-        "contractSize": 100000
-      }
-    },
-    "EURUSD": {
-      "icmarkets": {
-        "long": -9.834,
-        "short": 4.026,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": -6.85,
-        "short": 3.19,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": -8.6638,
-        "short": 2.3362,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": -9.3,
-        "short": 4.5,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": -6.77,
-        "short": 4.17,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -8.73,
-        "short": 2.07,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": -9.71,
-        "short": 4.5,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": -9.09,
-        "short": 4.64,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": -8.1,
-        "short": 3.22,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.67,
-        "short": 0,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": -8.4,
-        "short": 0.0,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": -8.4,
-        "short": 0.0,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": -8.4,
-        "short": 0.0,
-        "contractSize": 100000
-      }
-    },
-    "CHFJPY": {
-      "icmarkets": {
-        "long": -7.3228,
-        "short": 2.2772,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": -7.5,
-        "short": 0.79,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": -12.1577,
-        "short": -1.7577,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": -9.35,
-        "short": -3.62,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": -11.05,
-        "short": -0.55,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -16.96,
-        "short": -7.26,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": -5.29,
-        "short": 0.43,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": -8.43,
-        "short": 1.86,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": -11.71,
-        "short": 0.87,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.8099999999999999,
-        "short": 0,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": -10.5,
-        "short": -0.9,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": -10.5,
-        "short": -0.9,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": -10.5,
-        "short": -0.9,
-        "contractSize": 100000
-      }
-    },
-    "AUDNZD": {
-      "icmarkets": {
-        "long": 3.174,
-        "short": -7.436,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 1.94,
-        "short": -7.5,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 1.1987,
-        "short": -10.6625,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 1.72,
-        "short": -8.35,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 3.8,
-        "short": -7.25,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -3.02,
-        "short": -10.82,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": -0.51,
-        "short": -3.34,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 2.34,
-        "short": -6.7,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 1.63,
-        "short": -9.81,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.27999999999999997,
-        "short": -1.16,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -9.5,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -9.5,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -9.5,
-        "contractSize": 100000
-      }
-    },
-    "GBPCHF": {
-      "icmarkets": {
-        "long": 8.778,
-        "short": -19.262,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 5.11,
-        "short": -19.34,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 4.3939,
-        "short": -15.0395,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 5.38,
-        "short": -16.58,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 7.96,
-        "short": -13.13,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": 5.37,
-        "short": -17.33,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 5.51,
-        "short": -15.77,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 4.33,
-        "short": -18.81,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 5.71,
-        "short": -15.53,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -1.83,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -16.6,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -16.6,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -16.6,
-        "contractSize": 100000
-      }
-    },
-    "AUDCAD": {
-      "icmarkets": {
-        "long": 3.859,
-        "short": -7.361,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 2.99,
-        "short": -7.87,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 2.0385,
-        "short": -8.4615,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 2.92,
-        "short": -8.11,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 2.72,
-        "short": -8.44,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": 0.77,
-        "short": -8.64,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 1.34,
-        "short": -4.77,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 3.59,
-        "short": -7.39,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 2.94,
-        "short": -8.19,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -0.97,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -7.7,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -7.7,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -7.7,
-        "contractSize": 100000
-      }
-    },
-    "NZDJPY": {
-      "icmarkets": {
-        "long": 5.113,
-        "short": -8.117,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 0.83,
-        "short": -6.72,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": -0.0711,
-        "short": -7.7703,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 0.45,
-        "short": -10.06,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 3.17,
-        "short": -5.88,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -1.51,
-        "short": -11.91,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 3.82,
-        "short": -9.56,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 2.15,
-        "short": -7.29,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 1.5,
-        "short": -8.67,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.12,
-        "short": -1.21,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -8.5,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -8.5,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -8.5,
         "contractSize": 100000
       }
     },
@@ -971,312 +331,337 @@
         "contractSize": 100000
       }
     },
-    "GBPJPY": {
+    "EURJPY": {
       "icmarkets": {
-        "long": 18.862,
-        "short": -27.328,
+        "long": 5.898,
+        "short": -10.472,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 5.64,
-        "short": -22.69,
+        "long": 1.35,
+        "short": -9.23,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 6.778,
-        "short": -24.5164,
+        "long": 1.242,
+        "short": -12.458,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": 7.93,
-        "short": -29.63,
+        "long": -1.73,
+        "short": -14.44,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 9.68,
-        "short": -24.65,
+        "long": 4.69,
+        "short": -9.52,
         "contractSize": 100000
       },
       "xm": {
-        "long": 0.81,
-        "short": -36.74,
+        "long": -6.42,
+        "short": -19.62,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 12.34,
-        "short": -24.84,
+        "long": 4.39,
+        "short": -10.42,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 8.96,
-        "short": -25.12,
+        "long": 3.02,
+        "short": -10.17,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 10.09,
-        "short": -26.43,
+        "long": 2.71,
+        "short": -12.75,
         "contractSize": 100000
       },
       "exness-std": {
         "long": 0,
-        "short": -2.17,
+        "short": -1.4,
         "contractSize": 100000
       },
       "hf-premium": {
-        "long": 0.0,
-        "short": -29.5,
+        "long": -0.4,
+        "short": -15.1,
         "contractSize": 100000
       },
       "hf-pro": {
-        "long": 0.0,
-        "short": -29.5,
+        "long": -0.4,
+        "short": -15.1,
         "contractSize": 100000
       },
       "hf-zero": {
-        "long": 0.0,
-        "short": -29.5,
+        "long": -0.4,
+        "short": -15.1,
         "contractSize": 100000
       }
     },
-    "GBPNZD": {
+    "NZDCHF": {
       "icmarkets": {
-        "long": 2.467,
-        "short": -14.043,
+        "long": 2.974,
+        "short": -5.906,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 0.17,
-        "short": -14.19,
+        "long": 1.9,
+        "short": -5.89,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 0.7741,
-        "short": -16.0259,
+        "long": 1.093,
+        "short": -5.1663,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": 1.22,
-        "short": -13.23,
+        "long": 2.45,
+        "short": -5.75,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 5.13,
-        "short": -11.52,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -1.87,
-        "short": -19.87,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 0.85,
-        "short": -9.64,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 1.31,
-        "short": -12.22,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 1.76,
-        "short": -15.35,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": -0.22999999999999998,
-        "short": -1.53,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -14.7,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -14.7,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -14.7,
-        "contractSize": 100000
-      }
-    },
-    "EURCHF": {
-      "icmarkets": {
-        "long": 3.449,
-        "short": -9.201,
-        "contractSize": 100000
-      },
-      "vantage": {
         "long": 2.08,
-        "short": -9.76,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 1.8057,
-        "short": -8.6914,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 2.17,
-        "short": -8.96,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 3.12,
-        "short": -8.63,
+        "short": -5.05,
         "contractSize": 100000
       },
       "xm": {
-        "long": 0.42,
-        "short": -10.68,
+        "long": 1.31,
+        "short": -6.19,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 2.14,
-        "short": -7.49,
+        "long": 2.63,
+        "short": -5.95,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 1.97,
-        "short": -9.53,
+        "long": 1.38,
+        "short": -5.74,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 2.17,
-        "short": -8.53,
+        "long": 1.28,
+        "short": -5.69,
         "contractSize": 100000
       },
       "exness-std": {
         "long": 0,
-        "short": -0.9,
+        "short": -0.64,
         "contractSize": 100000
       },
       "hf-premium": {
         "long": 0.0,
-        "short": -9.7,
+        "short": -5.2,
         "contractSize": 100000
       },
       "hf-pro": {
         "long": 0.0,
-        "short": -9.7,
+        "short": -5.2,
         "contractSize": 100000
       },
       "hf-zero": {
         "long": 0.0,
-        "short": -9.7,
+        "short": -5.2,
         "contractSize": 100000
       }
     },
-    "USOIL": {
+    "AUDNZD": {
       "icmarkets": {
-        "long": 0.893,
-        "short": -2.795,
-        "contractSize": 100
-      },
-      "vantage": {
-        "long": -25.0,
-        "short": -33.1561,
-        "contractSize": 1000
-      },
-      "blackbull": {
-        "long": 29.718,
-        "short": -81.508,
-        "contractSize": 1000
-      },
-      "pepperstone": {
-        "long": 19.96,
-        "short": -26.34,
-        "contractSize": 100
-      },
-      "tickmill": {
-        "long": 8.76,
-        "short": -11.03,
-        "contractSize": 1
-      },
-      "fpmarkets": {
-        "long": 64.5,
-        "short": -262.5,
-        "contractSize": 1000
-      },
-      "fusionmarkets": {
-        "long": 12.82,
-        "short": -31.24,
-        "contractSize": 1000
-      },
-      "eightcap": {
-        "long": 11.31,
-        "short": -30.14,
-        "contractSize": 100
-      }
-    },
-    "NZDUSD": {
-      "icmarkets": {
-        "long": -3.668,
-        "short": 0.072,
+        "long": 3.174,
+        "short": -7.436,
         "contractSize": 100000
       },
       "vantage": {
-        "long": -2.54,
-        "short": 0.98,
+        "long": 1.94,
+        "short": -7.5,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": -4.0591,
-        "short": 0.3409,
+        "long": 1.1987,
+        "short": -10.6625,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": -3.37,
-        "short": 0.36,
+        "long": 1.72,
+        "short": -8.35,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": -2.83,
-        "short": 1.4,
+        "long": 3.8,
+        "short": -7.25,
         "contractSize": 100000
       },
       "xm": {
-        "long": -4.03,
-        "short": 0.47,
+        "long": -3.02,
+        "short": -10.82,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": -2.76,
-        "short": 0.46,
+        "long": -0.51,
+        "short": -3.34,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": -3.56,
-        "short": 1.01,
+        "long": 2.34,
+        "short": -6.7,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": -3.9,
-        "short": 0.46,
+        "long": 1.63,
+        "short": -9.81,
         "contractSize": 100000
       },
       "exness-std": {
         "long": -0.27999999999999997,
-        "short": -0.02,
+        "short": -1.16,
         "contractSize": 100000
       },
       "hf-premium": {
-        "long": -3.8,
+        "long": 0.0,
+        "short": -9.5,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -9.5,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -9.5,
+        "contractSize": 100000
+      }
+    },
+    "USDCAD": {
+      "icmarkets": {
+        "long": 3.272,
+        "short": -9.618,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 2.72,
+        "short": -8.11,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 1.8592,
+        "short": -10.0639,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 3.14,
+        "short": -8.96,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 4.5,
+        "short": -7.6,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 2.09,
+        "short": -10.71,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 3.49,
+        "short": -9.1,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 3.59,
+        "short": -8.54,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 2.44,
+        "short": -11.72,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -0.75,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -8.9,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -8.9,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -8.9,
+        "contractSize": 100000
+      }
+    },
+    "EURUSD": {
+      "icmarkets": {
+        "long": -9.834,
+        "short": 4.026,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": -6.85,
+        "short": 3.19,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": -8.6638,
+        "short": 2.3362,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": -9.3,
+        "short": 4.5,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": -6.77,
+        "short": 4.17,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": -8.73,
+        "short": 2.07,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": -9.71,
+        "short": 4.5,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": -9.09,
+        "short": 4.64,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": -8.1,
+        "short": 3.22,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.67,
+        "short": 0,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": -8.4,
         "short": 0.0,
         "contractSize": 100000
       },
       "hf-pro": {
-        "long": -3.8,
+        "long": -8.4,
         "short": 0.0,
         "contractSize": 100000
       },
       "hf-zero": {
-        "long": -3.8,
+        "long": -8.4,
         "short": 0.0,
         "contractSize": 100000
       }
@@ -1348,137 +733,122 @@
         "contractSize": 100000
       }
     },
-    "AUDJPY": {
+    "SILVER": {
       "icmarkets": {
-        "long": 11.031,
-        "short": -14.369,
-        "contractSize": 100000
+        "long": -8.4874,
+        "short": 7.1796,
+        "contractSize": 1000
       },
       "vantage": {
-        "long": 2.35,
-        "short": -11.91,
-        "contractSize": 100000
+        "long": -20.06,
+        "short": 4.8,
+        "contractSize": 5000
       },
       "blackbull": {
-        "long": 4.3932,
-        "short": -14.3294,
-        "contractSize": 100000
+        "long": -28.7534,
+        "short": 3.2815,
+        "contractSize": 5000
       },
       "pepperstone": {
-        "long": 5.84,
-        "short": -16.43,
-        "contractSize": 100000
+        "long": -19.01,
+        "short": 7.35,
+        "contractSize": 5000
       },
       "tickmill": {
-        "long": 8.71,
-        "short": -12.22,
-        "contractSize": 100000
+        "long": -14.98,
+        "short": 4.59,
+        "contractSize": 5000
       },
       "xm": {
-        "long": 3.09,
-        "short": -16.71,
-        "contractSize": 100000
+        "long": -30.57,
+        "short": 2.38,
+        "contractSize": 5000
       },
       "fpmarkets": {
-        "long": 5.1,
-        "short": -10.9,
-        "contractSize": 100000
+        "long": -16.54,
+        "short": 2.64,
+        "contractSize": 5000
       },
       "fusionmarkets": {
-        "long": 5.92,
-        "short": -13.66,
-        "contractSize": 100000
+        "long": -15.24,
+        "short": 0.12,
+        "contractSize": 5000
       },
       "eightcap": {
-        "long": 5.49,
-        "short": -16.85,
-        "contractSize": 100000
+        "long": -17.31,
+        "short": 3.1,
+        "contractSize": 5000
       },
       "exness-std": {
-        "long": -0.01,
-        "short": -0.22000000000000003,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -14.8,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -14.8,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -14.8,
-        "contractSize": 100000
+        "long": -0.82,
+        "short": 0,
+        "contractSize": 5000
       }
     },
-    "USDCAD": {
+    "GBPCHF": {
       "icmarkets": {
-        "long": 3.272,
-        "short": -9.618,
+        "long": 8.778,
+        "short": -19.262,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 2.72,
-        "short": -8.11,
+        "long": 5.11,
+        "short": -19.34,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 1.8592,
-        "short": -10.0639,
+        "long": 4.3939,
+        "short": -15.0395,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": 3.14,
-        "short": -8.96,
+        "long": 5.38,
+        "short": -16.58,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 4.5,
-        "short": -7.6,
+        "long": 7.96,
+        "short": -13.13,
         "contractSize": 100000
       },
       "xm": {
-        "long": 2.09,
-        "short": -10.71,
+        "long": 5.37,
+        "short": -17.33,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 3.49,
-        "short": -9.1,
+        "long": 5.51,
+        "short": -15.77,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 3.59,
-        "short": -8.54,
+        "long": 4.33,
+        "short": -18.81,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 2.44,
-        "short": -11.72,
+        "long": 5.71,
+        "short": -15.53,
         "contractSize": 100000
       },
       "exness-std": {
         "long": 0,
-        "short": -0.75,
+        "short": -1.83,
         "contractSize": 100000
       },
       "hf-premium": {
         "long": 0.0,
-        "short": -8.9,
+        "short": -16.6,
         "contractSize": 100000
       },
       "hf-pro": {
         "long": 0.0,
-        "short": -8.9,
+        "short": -16.6,
         "contractSize": 100000
       },
       "hf-zero": {
         "long": 0.0,
-        "short": -8.9,
+        "short": -16.6,
         "contractSize": 100000
       }
     },
@@ -1549,6 +919,207 @@
         "contractSize": 100000
       }
     },
+    "CHFJPY": {
+      "icmarkets": {
+        "long": -7.3228,
+        "short": 2.2772,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": -7.5,
+        "short": 0.79,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": -12.1577,
+        "short": -1.7577,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": -9.35,
+        "short": -3.62,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": -11.05,
+        "short": -0.55,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": -16.96,
+        "short": -7.26,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": -5.29,
+        "short": 0.43,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": -8.43,
+        "short": 1.86,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": -11.71,
+        "short": 0.87,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.8099999999999999,
+        "short": 0,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": -10.5,
+        "short": -0.9,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": -10.5,
+        "short": -0.9,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": -10.5,
+        "short": -0.9,
+        "contractSize": 100000
+      }
+    },
+    "GBPJPY": {
+      "icmarkets": {
+        "long": 18.862,
+        "short": -27.328,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 5.64,
+        "short": -22.69,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 6.778,
+        "short": -24.5164,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 7.93,
+        "short": -29.63,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 9.68,
+        "short": -24.65,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 0.81,
+        "short": -36.74,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 12.34,
+        "short": -24.84,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 8.96,
+        "short": -25.12,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 10.09,
+        "short": -26.43,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -2.17,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -29.5,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -29.5,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -29.5,
+        "contractSize": 100000
+      }
+    },
+    "NZDUSD": {
+      "icmarkets": {
+        "long": -3.668,
+        "short": 0.072,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": -2.54,
+        "short": 0.98,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": -4.0591,
+        "short": 0.3409,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": -3.37,
+        "short": 0.36,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": -2.83,
+        "short": 1.4,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": -4.03,
+        "short": 0.47,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": -2.76,
+        "short": 0.46,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": -3.56,
+        "short": 1.01,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": -3.9,
+        "short": 0.46,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.27999999999999997,
+        "short": -0.02,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": -3.8,
+        "short": 0.0,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": -3.8,
+        "short": 0.0,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": -3.8,
+        "short": 0.0,
+        "contractSize": 100000
+      }
+    },
     "AUDUSD": {
       "icmarkets": {
         "long": -2.418,
@@ -1613,6 +1184,274 @@
       "hf-zero": {
         "long": -1.6,
         "short": -3.1,
+        "contractSize": 100000
+      }
+    },
+    "GBPNZD": {
+      "icmarkets": {
+        "long": 2.467,
+        "short": -14.043,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 0.17,
+        "short": -14.19,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 0.7741,
+        "short": -16.0259,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 1.22,
+        "short": -13.23,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 5.13,
+        "short": -11.52,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": -1.87,
+        "short": -19.87,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 0.85,
+        "short": -9.64,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 1.31,
+        "short": -12.22,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 1.76,
+        "short": -15.35,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.22999999999999998,
+        "short": -1.53,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -14.7,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -14.7,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -14.7,
+        "contractSize": 100000
+      }
+    },
+    "GBPCAD": {
+      "icmarkets": {
+        "long": 5.078,
+        "short": -14.602,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 2.81,
+        "short": -15.46,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 2.4805,
+        "short": -13.8195,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 3.84,
+        "short": -13.58,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 5.54,
+        "short": -10.4,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 1.33,
+        "short": -16.47,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 3.34,
+        "short": -11.94,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 3.79,
+        "short": -13.62,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 4.26,
+        "short": -13.52,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -1.03,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -13.1,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -13.1,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -13.1,
+        "contractSize": 100000
+      }
+    },
+    "AUDCAD": {
+      "icmarkets": {
+        "long": 3.859,
+        "short": -7.361,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 2.99,
+        "short": -7.87,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 2.0385,
+        "short": -8.4615,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 2.92,
+        "short": -8.11,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 2.72,
+        "short": -8.44,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 0.77,
+        "short": -8.64,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 1.34,
+        "short": -4.77,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 3.59,
+        "short": -7.39,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 2.94,
+        "short": -8.19,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -0.97,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -7.7,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -7.7,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -7.7,
+        "contractSize": 100000
+      }
+    },
+    "EURCHF": {
+      "icmarkets": {
+        "long": 3.449,
+        "short": -9.201,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 2.08,
+        "short": -9.76,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 1.8057,
+        "short": -8.6914,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 2.17,
+        "short": -8.96,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 3.12,
+        "short": -8.63,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 0.42,
+        "short": -10.68,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 2.14,
+        "short": -7.49,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 1.97,
+        "short": -9.53,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 2.17,
+        "short": -8.53,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -0.9,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -9.7,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -9.7,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -9.7,
         "contractSize": 100000
       }
     },
@@ -1750,137 +1589,350 @@
         "contractSize": 100000
       }
     },
-    "GBPCAD": {
+    "UKOIL": {
       "icmarkets": {
-        "long": 5.078,
-        "short": -14.602,
+        "long": 0.282,
+        "short": -2.148,
+        "contractSize": 100
+      },
+      "vantage": {
+        "long": 0.0,
+        "short": -149.8662,
+        "contractSize": 1000
+      },
+      "blackbull": {
+        "long": 171.7268,
+        "short": -233.1567,
+        "contractSize": 1000
+      },
+      "pepperstone": {
+        "long": 9.04,
+        "short": -15.48,
+        "contractSize": 100
+      },
+      "tickmill": {
+        "long": 11.42,
+        "short": -13.1,
+        "contractSize": 1
+      },
+      "fpmarkets": {
+        "long": 78.1,
+        "short": -317.1,
+        "contractSize": 1000
+      },
+      "fusionmarkets": {
+        "long": 3.78,
+        "short": -20.24,
+        "contractSize": 1000
+      },
+      "eightcap": {
+        "long": 4.8,
+        "short": -19.22,
+        "contractSize": 100
+      }
+    },
+    "NZDJPY": {
+      "icmarkets": {
+        "long": 5.113,
+        "short": -8.117,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 2.81,
-        "short": -15.46,
+        "long": 0.83,
+        "short": -6.72,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 2.4805,
-        "short": -13.8195,
+        "long": -0.0711,
+        "short": -7.7703,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": 3.84,
-        "short": -13.58,
+        "long": 0.45,
+        "short": -10.06,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 5.54,
-        "short": -10.4,
+        "long": 3.17,
+        "short": -5.88,
         "contractSize": 100000
       },
       "xm": {
-        "long": 1.33,
-        "short": -16.47,
+        "long": -1.51,
+        "short": -11.91,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 3.34,
-        "short": -11.94,
+        "long": 3.82,
+        "short": -9.56,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 3.79,
-        "short": -13.62,
+        "long": 2.15,
+        "short": -7.29,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 4.26,
-        "short": -13.52,
+        "long": 1.5,
+        "short": -8.67,
         "contractSize": 100000
       },
       "exness-std": {
-        "long": 0,
-        "short": -1.03,
+        "long": -0.12,
+        "short": -1.21,
         "contractSize": 100000
       },
       "hf-premium": {
         "long": 0.0,
-        "short": -13.1,
+        "short": -8.5,
         "contractSize": 100000
       },
       "hf-pro": {
         "long": 0.0,
-        "short": -13.1,
+        "short": -8.5,
         "contractSize": 100000
       },
       "hf-zero": {
         "long": 0.0,
-        "short": -13.1,
+        "short": -8.5,
         "contractSize": 100000
       }
     },
-    "NZDCHF": {
+    "NATGAS": {
       "icmarkets": {
-        "long": 2.974,
-        "short": -5.906,
+        "long": 2.026,
+        "short": -7.791,
+        "contractSize": 10000
+      },
+      "vantage": {
+        "long": -0.2,
+        "short": -3.4,
+        "contractSize": 10000
+      },
+      "blackbull": {
+        "long": -3.528,
+        "short": -3.948,
+        "contractSize": 10000
+      },
+      "pepperstone": {
+        "long": 0.32,
+        "short": -0.53,
+        "contractSize": 10000
+      },
+      "tickmill": {
+        "long": -3.44,
+        "short": 0.89,
+        "contractSize": 10000
+      },
+      "fpmarkets": {
+        "long": -7.58,
+        "short": 2.72,
+        "contractSize": 10000
+      },
+      "fusionmarkets": {
+        "long": 0.64,
+        "short": -6.9,
+        "contractSize": 10000
+      }
+    },
+    "AUDCHF": {
+      "icmarkets": {
+        "long": 6.172,
+        "short": -9.318,
         "contractSize": 100000
       },
       "vantage": {
-        "long": 1.9,
-        "short": -5.89,
+        "long": 4.23,
+        "short": -9.09,
         "contractSize": 100000
       },
       "blackbull": {
-        "long": 1.093,
-        "short": -5.1663,
+        "long": 3.5146,
+        "short": -8.6651,
         "contractSize": 100000
       },
       "pepperstone": {
-        "long": 2.45,
-        "short": -5.75,
+        "long": 4.82,
+        "short": -9.07,
         "contractSize": 100000
       },
       "tickmill": {
-        "long": 2.08,
-        "short": -5.05,
+        "long": 4.98,
+        "short": -8.78,
         "contractSize": 100000
       },
       "xm": {
-        "long": 1.31,
-        "short": -6.19,
+        "long": 3.93,
+        "short": -9.57,
         "contractSize": 100000
       },
       "fpmarkets": {
-        "long": 2.63,
-        "short": -5.95,
+        "long": 3.31,
+        "short": -7.1,
         "contractSize": 100000
       },
       "fusionmarkets": {
-        "long": 1.38,
-        "short": -5.74,
+        "long": 4.04,
+        "short": -10.08,
         "contractSize": 100000
       },
       "eightcap": {
-        "long": 1.28,
-        "short": -5.69,
+        "long": 3.28,
+        "short": -8.66,
         "contractSize": 100000
       },
       "exness-std": {
         "long": 0,
-        "short": -0.64,
+        "short": -0.9199999999999999,
         "contractSize": 100000
       },
       "hf-premium": {
         "long": 0.0,
-        "short": -5.2,
+        "short": -8.4,
         "contractSize": 100000
       },
       "hf-pro": {
         "long": 0.0,
-        "short": -5.2,
+        "short": -8.4,
         "contractSize": 100000
       },
       "hf-zero": {
         "long": 0.0,
-        "short": -5.2,
+        "short": -8.4,
+        "contractSize": 100000
+      }
+    },
+    "USDJPY": {
+      "icmarkets": {
+        "long": 13.514,
+        "short": -19.916,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 7.55,
+        "short": -16.89,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 6.3961,
+        "short": -17.9685,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 8.12,
+        "short": -21.88,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 10.6,
+        "short": -15.37,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 0.95,
+        "short": -26.85,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 9.54,
+        "short": -18.97,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 6.61,
+        "short": -18.54,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 6.7,
+        "short": -20.16,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -1.5,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -22.0,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -22.0,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -22.0,
+        "contractSize": 100000
+      }
+    },
+    "USDCHF": {
+      "icmarkets": {
+        "long": 7.741,
+        "short": -12.799,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": 5.14,
+        "short": -12.65,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": 4.4964,
+        "short": -11.1727,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": 5.76,
+        "short": -12.11,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": 7.06,
+        "short": -10.17,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": 3.82,
+        "short": -13.28,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": 5.97,
+        "short": -11.6,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": 5.36,
+        "short": -13.42,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": 4.34,
+        "short": -11.32,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": 0,
+        "short": -0.9800000000000001,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": 0.0,
+        "short": -12.6,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": 0.0,
+        "short": -12.6,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": 0.0,
+        "short": -12.6,
         "contractSize": 100000
       }
     },
@@ -1951,165 +2003,113 @@
         "contractSize": 100000
       }
     },
-    "CADJPY": {
+    "USOIL": {
       "icmarkets": {
-        "long": 4.794,
-        "short": -7.936,
-        "contractSize": 100000
-      },
-      "vantage": {
-        "long": 1.53,
-        "short": -6.18,
-        "contractSize": 100000
-      },
-      "blackbull": {
-        "long": 0.0517,
-        "short": -8.4773,
-        "contractSize": 100000
-      },
-      "pepperstone": {
-        "long": 0.48,
-        "short": -10.91,
-        "contractSize": 100000
-      },
-      "tickmill": {
-        "long": 3.33,
-        "short": -6.37,
-        "contractSize": 100000
-      },
-      "xm": {
-        "long": -1.68,
-        "short": -11.18,
-        "contractSize": 100000
-      },
-      "fpmarkets": {
-        "long": 3.32,
-        "short": -8.17,
-        "contractSize": 100000
-      },
-      "fusionmarkets": {
-        "long": 1.94,
-        "short": -6.81,
-        "contractSize": 100000
-      },
-      "eightcap": {
-        "long": 1.89,
-        "short": -8.44,
-        "contractSize": 100000
-      },
-      "exness-std": {
-        "long": 0,
-        "short": -0.63,
-        "contractSize": 100000
-      },
-      "hf-premium": {
-        "long": 0.0,
-        "short": -9.1,
-        "contractSize": 100000
-      },
-      "hf-pro": {
-        "long": 0.0,
-        "short": -9.1,
-        "contractSize": 100000
-      },
-      "hf-zero": {
-        "long": 0.0,
-        "short": -9.1,
-        "contractSize": 100000
-      }
-    },
-    "SILVER": {
-      "icmarkets": {
-        "long": -8.4874,
-        "short": 7.1796,
-        "contractSize": 1000
-      },
-      "vantage": {
-        "long": -20.06,
-        "short": 4.8,
-        "contractSize": 5000
-      },
-      "blackbull": {
-        "long": -28.7534,
-        "short": 3.2815,
-        "contractSize": 5000
-      },
-      "pepperstone": {
-        "long": -19.01,
-        "short": 7.35,
-        "contractSize": 5000
-      },
-      "tickmill": {
-        "long": -14.98,
-        "short": 4.59,
-        "contractSize": 5000
-      },
-      "xm": {
-        "long": -30.57,
-        "short": 2.38,
-        "contractSize": 5000
-      },
-      "fpmarkets": {
-        "long": -16.54,
-        "short": 2.64,
-        "contractSize": 5000
-      },
-      "fusionmarkets": {
-        "long": -15.24,
-        "short": 0.12,
-        "contractSize": 5000
-      },
-      "eightcap": {
-        "long": -17.31,
-        "short": 3.1,
-        "contractSize": 5000
-      },
-      "exness-std": {
-        "long": -0.82,
-        "short": 0,
-        "contractSize": 5000
-      }
-    },
-    "UKOIL": {
-      "icmarkets": {
-        "long": 0.282,
-        "short": -2.148,
+        "long": 0.893,
+        "short": -2.795,
         "contractSize": 100
       },
       "vantage": {
-        "long": 0.0,
-        "short": -149.8662,
+        "long": -25.0,
+        "short": -33.1561,
         "contractSize": 1000
       },
       "blackbull": {
-        "long": 171.7268,
-        "short": -233.1567,
+        "long": 29.718,
+        "short": -81.508,
         "contractSize": 1000
       },
       "pepperstone": {
-        "long": 9.04,
-        "short": -15.48,
+        "long": 19.96,
+        "short": -26.34,
         "contractSize": 100
       },
       "tickmill": {
-        "long": 11.42,
-        "short": -13.1,
+        "long": 8.76,
+        "short": -11.03,
         "contractSize": 1
       },
       "fpmarkets": {
-        "long": 78.1,
-        "short": -317.1,
+        "long": 64.5,
+        "short": -262.5,
         "contractSize": 1000
       },
       "fusionmarkets": {
-        "long": 3.78,
-        "short": -20.24,
+        "long": 12.82,
+        "short": -31.24,
         "contractSize": 1000
       },
       "eightcap": {
-        "long": 4.8,
-        "short": -19.22,
+        "long": 11.31,
+        "short": -30.14,
         "contractSize": 100
+      }
+    },
+    "EURCAD": {
+      "icmarkets": {
+        "long": -4.637,
+        "short": -0.587,
+        "contractSize": 100000
+      },
+      "vantage": {
+        "long": -3.7,
+        "short": -2.83,
+        "contractSize": 100000
+      },
+      "blackbull": {
+        "long": -5.3836,
+        "short": -4.1836,
+        "contractSize": 100000
+      },
+      "pepperstone": {
+        "long": -6.43,
+        "short": -2.03,
+        "contractSize": 100000
+      },
+      "tickmill": {
+        "long": -4.92,
+        "short": -3.35,
+        "contractSize": 100000
+      },
+      "xm": {
+        "long": -6.67,
+        "short": -6.47,
+        "contractSize": 100000
+      },
+      "fpmarkets": {
+        "long": -4.91,
+        "short": 0.26,
+        "contractSize": 100000
+      },
+      "fusionmarkets": {
+        "long": -2.91,
+        "short": -2.08,
+        "contractSize": 100000
+      },
+      "eightcap": {
+        "long": -3.85,
+        "short": -2.76,
+        "contractSize": 100000
+      },
+      "exness-std": {
+        "long": -0.32,
+        "short": -0.13999999999999999,
+        "contractSize": 100000
+      },
+      "hf-premium": {
+        "long": -5.0,
+        "short": -3.4,
+        "contractSize": 100000
+      },
+      "hf-pro": {
+        "long": -5.0,
+        "short": -3.4,
+        "contractSize": 100000
+      },
+      "hf-zero": {
+        "long": -5.0,
+        "short": -3.4,
+        "contractSize": 100000
       }
     }
   }
