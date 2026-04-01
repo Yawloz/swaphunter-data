@@ -106,12 +106,21 @@ CBF_BROKERS = {
 # CBF FETCH
 # ─────────────────────────────────────────────────────
 def fetch_cbf_page(cbf_id, group, page=1, retries=3):
+    import urllib.parse
+    group_encoded = urllib.parse.quote(group, safe='')
     url = (f"{CBF_BASE}/{cbf_id}"
-           f"?currentPage={page}&countPerPage=100&search=&group={group.replace(' ', '%20')}")
+           f"?currentPage={page}&countPerPage=100&search=&group={group_encoded}")
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Origin": "https://fxverify.com",
         "Referer": "https://fxverify.com/",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "cross-site",
     }
     for attempt in range(retries):
         try:
