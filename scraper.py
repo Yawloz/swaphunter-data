@@ -155,8 +155,7 @@ def run_cbf():
                     if strip_suffixes:
                         raw_name = strip_symbol_suffix(raw_name, strip_suffixes)
 
-                    if item.get("swapType") != "InPoints":
-                        continue
+                    swap_type = item.get("swapType", "")
 
                     canon = CBF_SYMBOL_MAP.get(raw_name, raw_name)
                     if canon is None or canon not in OUR_SYMBOLS_SET:
@@ -168,14 +167,38 @@ def run_cbf():
                     sv = item.get("swapShort")
                     cs = cs_override.get(canon) or item.get("contractSize")
 
+                    if swap_type == "InPoints":
+                        long_val  = round(float(lv), 4) if lv is not None else None
+                        short_val = round(float(sv), 4) if sv is not None else None
+                    elif swap_type == "InPips":
+                        # 1 pip = 10 points for most pairs, JPY pairs same
+                        pip_to_pts = 10
+                        long_val  = round(float(lv) * pip_to_pts, 4) if lv is not None else None
+                        short_val = round(float(sv) * pip_to_pts, 4) if sv is not None else None
+                    elif swap_type == "InMoney":
+                        # Already in account currency per lot — store as-is
+                        # Tag with a special contractSize=0 so frontend knows to use directly
+                        long_val  = round(float(lv), 4) if lv is not None else None
+                        short_val = round(float(sv), 4) if sv is not None else None
+                    else:
+                        # Unknown type — skip
+                        print(f"      Unknown swapType={swap_type} for {raw_name}, skipping")
+                        continue
+
                     broker_data[canon] = {
-                        "long":         round(float(lv), 4) if lv is not None else None,
-                        "short":        round(float(sv), 4) if sv is not None else None,
+                        "long":         long_val,
+                        "short":        short_val,
                         "contractSize": int(cs) if cs is not None else None,
+                        "swapType":     swap_type,
                     }
                 time.sleep(0.8)
 
-        print(f"    Got {len(broker_data)} symbols")
+        # Log swapTypes found for debugging
+        swap_types_found = {}
+        for sym_data in broker_data.values():
+            t = sym_data.get("swapType", "unknown")
+            swap_types_found[t] = swap_types_found.get(t, 0) + 1
+        print(f"    Got {len(broker_data)} symbols | swapTypes: {swap_types_found}")
         for symbol, rates in broker_data.items():
             output.setdefault(symbol, {})[broker_key] = rates
 
@@ -381,4 +404,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
