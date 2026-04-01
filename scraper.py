@@ -106,8 +106,10 @@ CBF_BROKERS = {
 # CBF FETCH
 # ─────────────────────────────────────────────────────
 def fetch_cbf_page(cbf_id, group, page=1, retries=3):
+    import urllib.parse
+    group_encoded = urllib.parse.quote(group, safe='')
     url = (f"{CBF_BASE}/{cbf_id}"
-           f"?currentPage={page}&countPerPage=100&search=&group={group.replace(' ', '%20')}")
+           f"?currentPage={page}&countPerPage=100&search=&group={group_encoded}")
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         "Accept": "application/json",
@@ -237,8 +239,8 @@ def run_exness():
             canon = reverse.get(item["instrument"])
             if canon:
                 output.setdefault(canon, {})["exness-std"] = {
-                    "long":         item["swap_long"],
-                    "short":        item["swap_short"],
+                    "long":         round(item["swap_long"] * 10, 4),
+                    "short":        round(item["swap_short"] * 10, 4),
                     "contractSize": EXNESS_CONTRACT_SIZES.get(canon, 100000),
                 }
         print(f"  Got {len(output)} symbols")
