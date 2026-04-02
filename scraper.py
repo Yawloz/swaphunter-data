@@ -269,8 +269,8 @@ def run_exness():
             canon = reverse.get(item["instrument"])
             if canon:
                 output.setdefault(canon, {})["exness-std"] = {
-                    "long":         item["swap_long"],
-                    "short":        item["swap_short"],
+                    "long":         round(item["swap_long"] * 10, 4),
+                    "short":        round(item["swap_short"] * 10, 4),
                     "contractSize": EXNESS_CONTRACT_SIZES.get(canon, 100000),
                 }
         print(f"  Got {len(output)} symbols")
@@ -284,13 +284,19 @@ def run_exness():
 # col mapping confirmed: sym=col[1], short=col[5], long=col[6]
 # ─────────────────────────────────────────────────────
 HF_URL = "https://hfeu.com/en/trading-instruments/forex"
-HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER"}
+HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER", "USOIL.S": "USOIL", "usoil.s": "USOIL"}
+
+# HF Markets only offers these symbols — filter out anything else
+# No AUD crosses (except AUDUSD), no metals, no energies
+# HF Markets confirmed: has GOLD (XAUUSD), USOIL (USOIL.S), all FX except AUD crosses
+# Missing: SILVER, UKOIL, NATGAS, AUDCAD, AUDJPY, AUDNZD, AUDCHF
+HF_EXCLUDED_SYMBOLS = {"SILVER", "UKOIL", "NATGAS", "AUDCAD", "AUDJPY", "AUDNZD", "AUDCHF"}
 
 # HF contract sizes confirmed from CBF:
 # FX: 100000, GOLD: 100, SILVER: 1000, UKOIL/USOIL: 100
 HF_CONTRACT_SIZES = {
     "GOLD": 100, "SILVER": 1000,
-    "UKOIL": 100, "USOIL": 100,
+    "UKOIL": 100, "USOIL": 100, "NATGAS": 10000,
 }
 
 HF_CONTAINERS = {
@@ -359,6 +365,8 @@ def run_hfmarkets():
                     raw_sym = row[0].upper()
                     sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
                     if sym not in OUR_SYMBOLS_SET:
+                        continue
+                    if sym in HF_EXCLUDED_SYMBOLS:
                         continue
                     short = parse_rate(row[1])
                     long  = parse_rate(row[2])
