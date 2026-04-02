@@ -306,6 +306,8 @@ HF_EXCLUDED_SYMBOLS = {
     "EURAUD", "EURNZD",
     # GBP crosses not offered
     "GBPAUD",
+    # NZD crosses
+    "GBPNZD", "NZDJPY",
 }
 
 # HF contract sizes confirmed from CBF:
@@ -352,6 +354,14 @@ def run_hfmarkets():
                     });
                 """)
                 time.sleep(1)
+
+                # Debug: find all div IDs containing 'container' or 'table'
+                all_ids = page.evaluate("""
+                    () => [...document.querySelectorAll('[id]')]
+                        .map(el => el.id)
+                        .filter(id => id.toLowerCase().includes('container') || id.toLowerCase().includes('table') || id.toLowerCase().includes('premium') || id.toLowerCase().includes('pro') || id.toLowerCase().includes('zero'))
+                """)
+                print(f"    Container IDs found on page: {all_ids}")
 
                 table_data = page.evaluate("""
                     (containers) => {
