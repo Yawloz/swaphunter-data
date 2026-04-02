@@ -82,6 +82,10 @@ CBF_BROKERS = {
     451: {
         "key": "tickmill",
         "groups": ["Forex", "CFD-Crude-Oil", "CFD-2"],
+        # CBF shows wrong contractSize for Tickmill energies — actual is 1 lot = 1 barrel
+        # Tick size is 0.01 not 0.001
+        # cs=10 makes swapToUSD formula correct: pts * 10 * 0.001 = pts * 0.01 (tick=0.01, actual_cs=1)
+        "contractSize_override": {"UKOIL": 10, "USOIL": 10},
     },
     278: {
         "key": "xm",
