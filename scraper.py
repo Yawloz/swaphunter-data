@@ -81,10 +81,10 @@ CBF_BROKERS = {
     },
     451: {
         "key": "tickmill",
-        "groups": ["Forex", "CFD-Crude-Oil", "CFD-2"],
-        # CBF shows wrong contractSize for Tickmill energies — actual is 1 lot = 1 barrel
-        # Tick size is 0.01 not 0.001
-        # cs=10 makes swapToUSD formula correct: pts * 10 * 0.001 = pts * 0.01 (tick=0.01, actual_cs=1)
+        "groups": ["Forex", "CFD-Crude-Oil", "CFD-2", ""],
+        "pages": {"": 2},  # page 2 of empty group has Gold/Silver
+        # CBF shows wrong contractSize for Tickmill energies
+        # cs=10 makes swapToUSD formula correct: pts * 10 * 0.001 = pts * 0.01
         "contractSize_override": {"UKOIL": 10, "USOIL": 10},
     },
     278: {
@@ -157,6 +157,7 @@ def run_cbf():
         pages_config = config.get("pages", {})
         strip_suffixes = config.get("strip_suffix", [])
         cs_override = config.get("contractSize_override", {})
+        exclude_syms = config.get("exclude_symbols", set())
 
         for group in config["groups"]:
             num_pages = pages_config.get(group, 1)
@@ -172,6 +173,8 @@ def run_cbf():
 
                     canon = CBF_SYMBOL_MAP.get(raw_name, raw_name)
                     if canon is None or canon not in OUR_SYMBOLS_SET:
+                        continue
+                    if canon in exclude_syms:
                         continue
                     if canon in broker_data:
                         continue  # first occurrence wins
