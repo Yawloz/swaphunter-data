@@ -36,7 +36,6 @@ CBF_SYMBOL_MAP = {
     "XBRUSD":    "UKOIL",   "XTIUSD":    "USOIL",    "XNGUSD":    "NATGAS",
     "UKOUSD":    "UKOIL",   "USOUSD":    "USOIL",
     "BRENT":     "UKOIL",   "WTI":       "USOIL",    "NATGAS":    "NATGAS",
-    # Pepperstone specific
     "SpotBrent": "UKOIL",   "SpotCrude": "USOIL",    "NatGas":    "NATGAS",
     # Tickmill specific
     "NAT.GAS":   "NATGAS",
@@ -75,8 +74,7 @@ CBF_BROKERS = {
         # CBF shows contractSize=1 for BRENT/WTI — actual is 1000. NATGAS is 10000.
         "contractSize_override": {"UKOIL": 1000, "USOIL": 1000, "NATGAS": 1},
     },
-    # Pepperstone moved to Myfxbook source (CBF data is wrong for them)
-    # 256: pepperstone — disabled
+
     451: {
         "key": "tickmill",
         "groups": ["Forex", "CFD-Crude-Oil", "CFD-2", ""],
@@ -425,73 +423,9 @@ def run_hfmarkets():
 
 
 # ─────────────────────────────────────────────────────
-# MYFXBOOK — Pepperstone only (CBF data wrong for them)
 # Returns USD per lot directly — stored with swapType="InMoney"
 # so frontend skips swapToUSD conversion
 # ─────────────────────────────────────────────────────
-PEPPERSTONE_OIDS = {
-    "EURUSD": 116025, "GBPUSD": 116026, "USDJPY": 116027,
-    "GBPJPY": 116029, "USDCAD": 116030, "EURAUD": 116031,
-    "EURJPY": 116032, "AUDCAD": 116034, "AUDJPY": 116037,
-    "AUDNZD": 116035, "AUDUSD": 116028, "CADJPY": 116038,
-    "EURCAD": 116039, "EURCHF": 116040, "EURGBP": 116042,
-    "EURNZD": 116044, "GBPCAD": 116048, "GBPCHF": 116049,
-    "NZDCAD": 116050, "NZDJPY": 116051, "NZDUSD": 116052,
-    "USDCHF": 116053, "CHFJPY": 116068, "AUDCHF": 116036,
-    "GBPNZD": 116070, "NZDCHF": 116071, "SILVER": 116072,
-    "GOLD":   116073, "CADCHF": 116082, "GBPAUD": 116083,
-}
-
-PEPPERSTONE_CS = {
-    "GOLD": 100, "SILVER": 5000,
-    "UKOIL": 1000, "USOIL": 1000, "NATGAS": 10000,
-}
-
-def fetch_myfxbook_pepperstone(oid, direction):
-    url = (f"https://www.myfxbook.com/get-swap-chart-by-symbol.json"
-           f"?symbolInfoOid={oid}&swapShortLong={direction}&rand=0.5")
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Referer": "https://www.myfxbook.com/forex-broker-swaps/pepperstone/208",
-        "X-Requested-With": "XMLHttpRequest",
-    }
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode())
-        brokers = data.get("categories", [])
-        values  = data.get("series", [{}])[0].get("data", [])
-        for name, val in zip(brokers, values):
-            if name in ("Pepperstone", "Pepperstone AU"):
-                return round(float(val), 4)
-        return None
-    except Exception as e:
-        print(f"    Myfxbook error OID {oid}: {e}")
-        return None
-
-def run_pepperstone_myfxbook():
-    print("── Pepperstone (Myfxbook) ──")
-    output = {}
-    for symbol, oid in PEPPERSTONE_OIDS.items():
-        print(f"  {symbol}...", end=" ", flush=True)
-        long_val  = fetch_myfxbook_pepperstone(oid, 0)
-        time.sleep(1.0)
-        short_val = fetch_myfxbook_pepperstone(oid, 1)
-        time.sleep(1.0)
-        if long_val is not None or short_val is not None:
-            cs = PEPPERSTONE_CS.get(symbol, 100000)
-            output.setdefault(symbol, {})["pepperstone"] = {
-                "long":  long_val,
-                "short": short_val,
-                "contractSize": cs,
-                "swapType": "InMoney"
-            }
-            print(f"long={long_val} short={short_val}")
-        else:
-            print("no data")
-    print(f"  Done. {len(output)} symbols for Pepperstone")
-    return output
 
 # ─────────────────────────────────────────────────────
 # MAIN
@@ -502,16 +436,13 @@ def run():
     cbf_data = run_cbf()
     exn_data = run_exness()
     hfm_data = run_hfmarkets()
-    pps_data = run_pepperstone_myfxbook()
-
-    all_symbols = set(list(cbf_data.keys()) + list(exn_data.keys()) + list(hfm_data.keys()) + list(pps_data.keys()))
+    all_symbols = set(list(cbf_data.keys()) + list(exn_data.keys()) + list(hfm_data.keys()))
     merged = {}
     for sym in all_symbols:
         merged[sym] = {}
         merged[sym].update(cbf_data.get(sym, {}))
         merged[sym].update(exn_data.get(sym, {}))
         merged[sym].update(hfm_data.get(sym, {}))
-        merged[sym].update(pps_data.get(sym, {}))
 
     brokers = set(b for sym in merged.values() for b in sym.keys())
     output = {
