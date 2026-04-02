@@ -285,8 +285,6 @@ def run_exness():
 # ─────────────────────────────────────────────────────
 HF_URLS = [
     "https://hfeu.com/en/trading-instruments/forex",
-    "https://hfeu.com/en/trading-instruments/metals",
-    "https://hfeu.com/en/trading-instruments/energies",
 ]
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER", "USOIL.S": "USOIL", "usoil.s": "USOIL"}
 
@@ -355,13 +353,19 @@ def run_hfmarkets():
                 """)
                 time.sleep(1)
 
-                # Debug: find all div IDs containing 'container' or 'table'
-                all_ids = page.evaluate("""
-                    () => [...document.querySelectorAll('[id]')]
-                        .map(el => el.id)
-                        .filter(id => id.toLowerCase().includes('container') || id.toLowerCase().includes('table') || id.toLowerCase().includes('premium') || id.toLowerCase().includes('pro') || id.toLowerCase().includes('zero'))
+                # Debug: dump ALL symbol names found in ALL tables on this page
+                all_syms = page.evaluate("""
+                    () => {
+                        const rows = document.querySelectorAll('table tbody tr');
+                        const syms = [];
+                        rows.forEach(r => {
+                            const cells = r.querySelectorAll('td');
+                            if(cells.length >= 2) syms.push(cells[1].innerText.trim());
+                        });
+                        return [...new Set(syms)].filter(s => s.length > 0);
+                    }
                 """)
-                print(f"    Container IDs found on page: {all_ids}")
+                print(f"    All symbols on page: {all_syms}")
 
                 table_data = page.evaluate("""
                     (containers) => {
