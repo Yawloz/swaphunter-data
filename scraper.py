@@ -283,14 +283,30 @@ def run_exness():
 # HF MARKETS — Playwright (3 account types separately)
 # col mapping confirmed: sym=col[1], short=col[5], long=col[6]
 # ─────────────────────────────────────────────────────
-HF_URL = "https://hfeu.com/en/trading-instruments/forex"
+HF_URLS = [
+    "https://hfeu.com/en/trading-instruments/forex",
+    "https://hfeu.com/en/trading-instruments/metals",
+    "https://hfeu.com/en/trading-instruments/energies",
+]
 HF_SYMBOL_MAP = {"XAUUSD": "GOLD", "XAGUSD": "SILVER", "USOIL.S": "USOIL", "usoil.s": "USOIL"}
 
 # HF Markets only offers these symbols — filter out anything else
 # No AUD crosses (except AUDUSD), no metals, no energies
-# HF Markets confirmed: has GOLD (XAUUSD), USOIL (USOIL.S), all FX except AUD crosses
-# Missing: SILVER, UKOIL, NATGAS, AUDCAD, AUDJPY, AUDNZD, AUDCHF
-HF_EXCLUDED_SYMBOLS = {"SILVER", "UKOIL", "NATGAS", "AUDCAD", "AUDJPY", "AUDNZD", "AUDCHF"}
+# HF Markets confirmed symbols - exclude everything not on their platform
+HF_EXCLUDED_SYMBOLS = {
+    # Metals HF doesn't have
+    "SILVER",
+    # Energies HF doesn't have
+    "UKOIL", "NATGAS",
+    # AUD crosses (only AUDUSD exists)
+    "AUDCAD", "AUDJPY", "AUDNZD", "AUDCHF",
+    # NZD pairs not offered
+    "NZDUSD", "NZDCAD", "NZDCHF",
+    # EUR crosses not offered
+    "EURAUD", "EURNZD",
+    # GBP crosses not offered
+    "GBPAUD",
+}
 
 # HF contract sizes confirmed from CBF:
 # FX: 100000, GOLD: 100, SILVER: 1000, UKOIL/USOIL: 100
@@ -326,56 +342,58 @@ def run_hfmarkets():
             page = browser.new_page(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
             )
-            page.goto(HF_URL, wait_until="domcontentloaded", timeout=60000)
-            time.sleep(5)
-            page.evaluate("""
-                ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
-                    const el = document.getElementById(id); if (el) el.remove();
-                });
-            """)
-            time.sleep(1)
+            for hf_url in HF_URLS:
+                print(f"  Scraping {hf_url}")
+                page.goto(hf_url, wait_until="domcontentloaded", timeout=60000)
+                time.sleep(4)
+                page.evaluate("""
+                    ['cookiescript_injected_wrapper','cookiescript_injected'].forEach(id => {
+                        const el = document.getElementById(id); if (el) el.remove();
+                    });
+                """)
+                time.sleep(1)
 
-            table_data = page.evaluate("""
-                (containers) => {
-                    const result = {};
-                    for (const [containerId, brokerKey] of Object.entries(containers)) {
-                        const container = document.getElementById(containerId);
-                        if (!container) { result[brokerKey] = []; continue; }
-                        const rows = container.querySelectorAll('table tbody tr');
-                        const rowData = [];
-                        rows.forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            if (cells.length >= 7) {
-                                rowData.push([
-                                    cells[1].innerText.trim(),
-                                    cells[5].innerText.trim(),
-                                    cells[6].innerText.trim()
-                                ]);
-                            }
-                        });
-                        result[brokerKey] = rowData;
+                table_data = page.evaluate("""
+                    (containers) => {
+                        const result = {};
+                        for (const [containerId, brokerKey] of Object.entries(containers)) {
+                            const container = document.getElementById(containerId);
+                            if (!container) { result[brokerKey] = []; continue; }
+                            const rows = container.querySelectorAll('table tbody tr');
+                            const rowData = [];
+                            rows.forEach(row => {
+                                const cells = row.querySelectorAll('td');
+                                if (cells.length >= 7) {
+                                    rowData.push([
+                                        cells[1].innerText.trim(),
+                                        cells[5].innerText.trim(),
+                                        cells[6].innerText.trim()
+                                    ]);
+                                }
+                            });
+                            result[brokerKey] = rowData;
+                        }
+                        return result;
                     }
-                    return result;
-                }
-            """, HF_CONTAINERS)
+                """, HF_CONTAINERS)
 
-            for broker_key, rows in table_data.items():
-                matched = 0
-                for row in rows:
-                    raw_sym = row[0].upper()
-                    sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
-                    if sym not in OUR_SYMBOLS_SET:
-                        continue
-                    if sym in HF_EXCLUDED_SYMBOLS:
-                        continue
-                    short = parse_rate(row[1])
-                    long  = parse_rate(row[2])
-                    cs = HF_CONTRACT_SIZES.get(sym, 100000)
-                    results.setdefault(sym, {})[broker_key] = {
-                        "long": long, "short": short, "contractSize": cs
-                    }
-                    matched += 1
-                print(f"  {broker_key}: {len(rows)} rows → {matched} matched")
+                for broker_key, rows in table_data.items():
+                    matched = 0
+                    for row in rows:
+                        raw_sym = row[0].upper()
+                        sym = HF_SYMBOL_MAP.get(raw_sym, raw_sym)
+                        if sym not in OUR_SYMBOLS_SET:
+                            continue
+                        if sym in HF_EXCLUDED_SYMBOLS:
+                            continue
+                        short = parse_rate(row[1])
+                        long  = parse_rate(row[2])
+                        cs = HF_CONTRACT_SIZES.get(sym, 100000)
+                        results.setdefault(sym, {})[broker_key] = {
+                            "long": long, "short": short, "contractSize": cs
+                        }
+                        matched += 1
+                    print(f"  {broker_key}: {len(rows)} rows → {matched} matched")
 
             browser.close()
     except Exception as e:
