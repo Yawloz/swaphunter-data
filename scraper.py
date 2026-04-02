@@ -482,4 +482,51 @@ def run_pepperstone_myfxbook():
         if long_val is not None or short_val is not None:
             cs = PEPPERSTONE_CS.get(symbol, 100000)
             output.setdefault(symbol, {})["pepperstone"] = {
-                
+                "long":  long_val,
+                "short": short_val,
+                "contractSize": cs,
+                "swapType": "InMoney"
+            }
+            print(f"long={long_val} short={short_val}")
+        else:
+            print("no data")
+    print(f"  Done. {len(output)} symbols for Pepperstone")
+    return output
+
+# ─────────────────────────────────────────────────────
+# MAIN
+# ─────────────────────────────────────────────────────
+def run():
+    print(f"\nSwapHunter scraper v5 — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
+
+    cbf_data = run_cbf()
+    exn_data = run_exness()
+    hfm_data = run_hfmarkets()
+    pps_data = run_pepperstone_myfxbook()
+
+    all_symbols = set(list(cbf_data.keys()) + list(exn_data.keys()) + list(hfm_data.keys()) + list(pps_data.keys()))
+    merged = {}
+    for sym in all_symbols:
+        merged[sym] = {}
+        merged[sym].update(cbf_data.get(sym, {}))
+        merged[sym].update(exn_data.get(sym, {}))
+        merged[sym].update(hfm_data.get(sym, {}))
+        merged[sym].update(pps_data.get(sym, {}))
+
+    brokers = set(b for sym in merged.values() for b in sym.keys())
+    output = {
+        "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "sources": sorted(brokers),
+        "swaps": merged,
+    }
+
+    with open("swaps.json", "w") as f:
+        json.dump(output, f, indent=2)
+
+    total = sum(len(v) for v in merged.values())
+    print(f"\n✓ Done — {len(merged)} symbols, {len(brokers)} brokers, {total} entries")
+    print(f"  Brokers: {sorted(brokers)}")
+
+
+if __name__ == "__main__":
+    run()
