@@ -45,8 +45,6 @@ CBF_SYMBOL_MAP = {
     "UKOIL":     "UKOIL",   "USOIL":     "USOIL",
     # XM uses canonical names directly
     "GOLD":      "GOLD",    "SILVER":    "SILVER",
-    # Libertex energies
-    "BRNCash":     "UKOIL",  "NGASCash":    "NATGAS",  "USOILCash":   "USOIL",
     # IronFX energies (SpotCmdty group)
     "BRENTCash":   "UKOIL",  "NAT.GASCash": "NATGAS",  "WTICash":     "USOIL",
     # Nulled — skip these
@@ -56,10 +54,7 @@ CBF_SYMBOL_MAP = {
     # IronFX duplicate/alternate entries — skip
     "XAGUSD-":   None,      "XAUUSD-":   None,
     "XAUEUR-":   None,      "XPDUSD-":   None,       "XPTUSD-":   None,
-    # Libertex .m duplicates — skip
-    "AUDUSD.m":  None,      "EURUSD.m":  None,       "GBPUSD.m":  None,
-    "NZDUSD.m":  None,      "USDCAD.m":  None,       "USDCHF.m":  None,
-    "USDJPY.m":  None,      "XAUUSD.m":  None,
+
 }
 
 # ─────────────────────────────────────────────────────
@@ -111,17 +106,8 @@ CBF_BROKERS = {
         "key": "eightcap",
         "groups": ["Forex", "Oil UK", "Oil US", "Metals"],
     },
-    395: {
-        "key": "icmarkets-eu",
-        "groups": ["Forex"],
-    },
-    1138: {
-        "key": "libertex",
-        "groups": ["FX Majors", "Energy", "Spot Metals"],
-        # Only XAUUSD and XAGUSD from Spot Metals (no XAUEUR)
-        # Only BRNCash, NGASCash, USOILCash from Energy
-        # .m symbol duplicates nulled in CBF_SYMBOL_MAP
-    },
+
+
     291: {
         "key": "ironfx",
         "groups": ["MajorFX", "MinorFX", "SpotCmdty", "SpotSilver", "SpotGold"],
