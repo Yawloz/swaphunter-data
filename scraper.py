@@ -45,10 +45,21 @@ CBF_SYMBOL_MAP = {
     "UKOIL":     "UKOIL",   "USOIL":     "USOIL",
     # XM uses canonical names directly
     "GOLD":      "GOLD",    "SILVER":    "SILVER",
+    # Libertex energies
+    "BRNCash":     "UKOIL",  "NGASCash":    "NATGAS",  "USOILCash":   "USOIL",
+    # IronFX energies (SpotCmdty group)
+    "BRENTCash":   "UKOIL",  "NAT.GASCash": "NATGAS",  "WTICash":     "USOIL",
     # Nulled — skip these
     "UKOUSDft":  None,      "CL-OIL":    None,
     "Rolltest":  None,      "GCM25":     None,
     "Gasoline":  None,
+    # IronFX duplicate/alternate entries — skip
+    "XAGUSD-":   None,      "XAUUSD-":   None,
+    "XAUEUR-":   None,      "XPDUSD-":   None,       "XPTUSD-":   None,
+    # Libertex .m duplicates — skip
+    "AUDUSD.m":  None,      "EURUSD.m":  None,       "GBPUSD.m":  None,
+    "NZDUSD.m":  None,      "USDCAD.m":  None,       "USDCHF.m":  None,
+    "USDJPY.m":  None,      "XAUUSD.m":  None,
 }
 
 # ─────────────────────────────────────────────────────
@@ -60,7 +71,7 @@ CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
 # strip_suffix: list of suffixes to strip from symbol names
 CBF_BROKERS = {
     3133: {
-        "key": "icmarkets",
+        "key": "ictrading",
         "groups": ["Forex Majors", "Forex Minors", "Metals", "Energies"],
     },
     1149: {
@@ -99,6 +110,25 @@ CBF_BROKERS = {
     1101: {
         "key": "eightcap",
         "groups": ["Forex", "Oil UK", "Oil US", "Metals"],
+    },
+    395: {
+        "key": "icmarkets",
+        "groups": ["Forex"],
+    },
+    1138: {
+        "key": "libertex",
+        "groups": ["FX Majors", "Energy", "Spot Metals"],
+        # Only XAUUSD and XAGUSD from Spot Metals (no XAUEUR)
+        # Only BRNCash, NGASCash, USOILCash from Energy
+        # .m symbol duplicates nulled in CBF_SYMBOL_MAP
+    },
+    291: {
+        "key": "ironfx",
+        "groups": ["MajorFX", "MinorFX", "SpotCmdty", "SpotSilver", "SpotGold"],
+        # SpotCmdty: only BRENTCash, NAT.GASCash, WTICash (cash energies)
+        # SpotSilver: only XAGUSD (swapType "1" = InMoney)
+        # SpotGold: only XAUUSD (swapType "1" = InMoney)
+        # XAGUSD-, XAUUSD- etc. nulled in CBF_SYMBOL_MAP
     },
 }
 
@@ -179,6 +209,12 @@ def run_cbf():
                     sv = item.get("swapShort")
                     cs = cs_override.get(canon) or item.get("contractSize")
 
+                    # Normalize numeric swapType strings (IronFX uses "0"/"1")
+                    if swap_type == "0":
+                        swap_type = "InPoints"
+                    elif swap_type == "1":
+                        swap_type = "InMoney"
+
                     if swap_type == "InPoints":
                         long_val  = round(float(lv), 4) if lv is not None else None
                         short_val = round(float(sv), 4) if sv is not None else None
@@ -188,8 +224,7 @@ def run_cbf():
                         long_val  = round(float(lv) * pip_to_pts, 4) if lv is not None else None
                         short_val = round(float(sv) * pip_to_pts, 4) if sv is not None else None
                     elif swap_type == "InMoney":
-                        # Already in account currency per lot — store as-is
-                        # Tag with a special contractSize=0 so frontend knows to use directly
+                        # Already in USD per lot — store as-is, frontend skips swapToUSD
                         long_val  = round(float(lv), 4) if lv is not None else None
                         short_val = round(float(sv), 4) if sv is not None else None
                     else:
