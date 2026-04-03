@@ -71,7 +71,7 @@ CBF_BASE = "https://spreads-api.cashbackforex.com/api/swapratesforbroker"
 # strip_suffix: list of suffixes to strip from symbol names
 CBF_BROKERS = {
     3133: {
-        "key": "ictrading",
+        "key": "icmarkets",
         "groups": ["Forex Majors", "Forex Minors", "Metals", "Energies"],
     },
     1149: {
@@ -112,7 +112,7 @@ CBF_BROKERS = {
         "groups": ["Forex", "Oil UK", "Oil US", "Metals"],
     },
     395: {
-        "key": "icmarkets",
+        "key": "icmarkets-eu",
         "groups": ["Forex"],
     },
     1138: {
