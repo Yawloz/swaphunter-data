@@ -77,17 +77,21 @@ CBF_BROKERS = {
     970: {
         "key": "blackbull",
         "groups": ["Forex Majors", "Forex", "Commodities", "Energies"],
-        # CBF shows contractSize=1 for BRENT/WTI — actual is 1000. NATGAS is 10000.
-        "contractSize_override": {"UKOIL": 1000, "USOIL": 1000, "NATGAS": 1},
+        # CBF API reports contractSize=1 for BlackBull energies — override with real specs.
+        # BlackBull MT5: NATGAS=1000, UKOIL=1000, USOIL=1000 (1000 units per lot).
+        # These match other brokers so 1:1 lot ratio holds for cross-broker arb.
+        "contractSize_override": {"UKOIL": 1000, "USOIL": 1000, "NATGAS": 1000},
     },
 
     451: {
         "key": "tickmill",
         "groups": ["Forex", "CFD-Crude-Oil", "CFD-2", ""],
         "pages": {"": 2},  # page 2 of empty group has Gold/Silver
-        # CBF shows wrong contractSize for Tickmill energies
-        # cs=10 makes swapToUSD formula correct: pts * 10 * 0.001 = pts * 0.01
-        "contractSize_override": {"UKOIL": 10, "USOIL": 10},
+        # Tickmill NATGAS real lot = 100 MMBtu (mini lot vs standard 1000 at other brokers).
+        # Tickmill UKOIL/USOIL real lot = 100 barrels (vs 1000 at other brokers).
+        # The CBF API reports these with the wrong CS — override with real specs.
+        # The frontend arb engine will compute the lot ratio CS_A/CS_B automatically.
+        "contractSize_override": {"UKOIL": 100, "USOIL": 100, "NATGAS": 100},
     },
     278: {
         "key": "xm",
