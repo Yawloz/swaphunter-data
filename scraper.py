@@ -77,21 +77,18 @@ CBF_BROKERS = {
     970: {
         "key": "blackbull",
         "groups": ["Forex Majors", "Forex", "Commodities", "Energies"],
-        # CBF API reports contractSize=1 for BlackBull energies — override with real specs.
-        # BlackBull MT5: NATGAS=1000, UKOIL=1000, USOIL=1000 (1000 units per lot).
-        # These match other brokers so 1:1 lot ratio holds for cross-broker arb.
-        "contractSize_override": {"UKOIL": 1000, "USOIL": 1000, "NATGAS": 1000},
+        # BlackBull energies: CBF API returns CS=1 for BRENT/WTI (1 unit per lot) — confirmed from CBF data.
+        # NATGAS=1000 units per lot. UKOIL/USOIL stay at CBF value (1).
+        "contractSize_override": {"NATGAS": 1000},
     },
 
     451: {
         "key": "tickmill",
         "groups": ["Forex", "CFD-Crude-Oil", "CFD-2", ""],
         "pages": {"": 2},  # page 2 of empty group has Gold/Silver
-        # Tickmill NATGAS real lot = 100 MMBtu (mini lot vs standard 1000 at other brokers).
-        # Tickmill UKOIL/USOIL real lot = 100 barrels (vs 1000 at other brokers).
-        # The CBF API reports these with the wrong CS — override with real specs.
-        # The frontend arb engine will compute the lot ratio CS_A/CS_B automatically.
-        "contractSize_override": {"UKOIL": 100, "USOIL": 100, "NATGAS": 100},
+        # Tickmill energies: UKOIL/USOIL = 100 barrels per lot, NATGAS = 10000 MMBtu per lot.
+        # CBF API reports wrong CS — override with real specs from broker site.
+        "contractSize_override": {"UKOIL": 100, "USOIL": 100, "NATGAS": 10000},
     },
     278: {
         "key": "xm",
@@ -461,12 +458,27 @@ def run():
     cbf_data = run_cbf()
     exn_data = run_exness()
     hfm_data = run_hfmarkets()
-    all_symbols = set(list(cbf_data.keys()) + list(exn_data.keys()) + list(hfm_data.keys()))
+
+    # Exness SF = Exness Swap-Free account — all swaps are 0 by definition
+    # Mirrors exness-std symbols/contractSizes but with long=0, short=0
+    exn_sf_data = {}
+    for sym, brokers in exn_data.items():
+        if "exness-std" in brokers:
+            exn_sf_data[sym] = {
+                "exness-sf": {
+                    "long": 0.0,
+                    "short": 0.0,
+                    "contractSize": brokers["exness-std"]["contractSize"],
+                }
+            }
+
+    all_symbols = set(list(cbf_data.keys()) + list(exn_data.keys()) + list(hfm_data.keys()) + list(exn_sf_data.keys()))
     merged = {}
     for sym in all_symbols:
         merged[sym] = {}
         merged[sym].update(cbf_data.get(sym, {}))
         merged[sym].update(exn_data.get(sym, {}))
+        merged[sym].update(exn_sf_data.get(sym, {}))
         merged[sym].update(hfm_data.get(sym, {}))
 
     brokers = set(b for sym in merged.values() for b in sym.keys())
